@@ -1,6 +1,7 @@
 package com.compose.wechat.main.friends.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.findNavController
 import com.compose.wechat.R
 import com.compose.wechat.main.friends.vm.FriendsViewModel
 import com.compose.wechat.ui.theme.WeChatTheme
@@ -35,7 +37,12 @@ class FriendsFragment : Fragment() {
             setContent {
                 WeChatTheme {
                     val friends = viewModel.getFriendsFlow().collectAsState(emptyList())
-                    FriendList(friendList = friends.value)
+                    FriendList(friendList = friends.value) {
+                        findNavController().navigate(R.id.main_chat, Bundle().apply {
+                            putInt("friend_id", it.id)
+                            putString("friend_name", it.name)
+                        })
+                    }
                 }
             }
         }

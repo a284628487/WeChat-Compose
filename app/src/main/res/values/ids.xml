@@ -19,4 +19,5 @@
     <item name="main_friends_fragment" type="id" />
     <item name="main_moments_fragment" type="id" />
     <item name="main_profile_fragment" type="id" />
+    <item name="main_chat_fragment" type="id" />
 </resources>

@@ -2,6 +2,7 @@ package com.compose.wechat.main.friends.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Divider
@@ -23,12 +24,12 @@ import com.compose.wechat.entity.IFriendItem
 import com.compose.wechat.ui.theme.WeChatTheme
 
 @Composable
-fun FriendList(friendList: List<IFriendItem>) {
+fun FriendList(friendList: List<IFriendItem>, onFriendItemClicked: (Friend) -> Unit) {
     LazyColumn() {
         friendList.forEachIndexed { index, iFriendItem ->
             item(key = index) {
                 if (iFriendItem is Friend) {
-                    FriendItem(friend = iFriendItem)
+                    FriendItem(friend = iFriendItem, onFriendItemClicked)
                 } else {
                     FriendIndexGroupItem(group = iFriendItem as FriendIndexGroup)
                 }
@@ -38,12 +39,15 @@ fun FriendList(friendList: List<IFriendItem>) {
 }
 
 @Composable
-fun FriendItem(friend: Friend) {
+fun FriendItem(friend: Friend, onClick: (Friend) -> Unit) {
     Column {
         Row(
             modifier = Modifier
                 .wrapContentHeight()
                 .fillMaxWidth()
+                .clickable(enabled = true, onClick = {
+                    onClick(friend)
+                })
                 .padding(horizontal = 16.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -51,7 +55,7 @@ fun FriendItem(friend: Friend) {
                 painter = painterResource(id = R.drawable.ic_frag),
                 contentDescription = "",
                 modifier = Modifier
-                    .size(width = 32.dp, height = 32.dp)
+                    .size(width = 36.dp, height = 36.dp)
                     .clip(MaterialTheme.shapes.medium)
             )
             Text(
@@ -65,7 +69,7 @@ fun FriendItem(friend: Friend) {
         }
         Divider(
             modifier = Modifier
-                .offset(x = 60.dp),
+                .offset(x = 64.dp),
             color = Color.LightGray,
             thickness = 0.3.dp
         )
@@ -101,6 +105,6 @@ fun FriendIndexGroupItemPreview() {
 @Composable
 fun FriendItemPreview() {
     WeChatTheme {
-        FriendItem(Friend(1, "", "标签", '0'))
+        FriendItem(Friend(1, "", "标签", '0'), {})
     }
 }

@@ -10,11 +10,14 @@ data class HomeMessage(
     val iconUrl: String,
     val title: String,
     val summary: String,
-    val date: Long,
     val senderId: Int,
     val senderName: String,
+    val receiverId: Int,
+    val receiverName: String,
+    val sessionId: Int,
+    val date: Long,
     val muted: Boolean = false,
-    val isTopped: Boolean = false
+    val isTopped: Boolean = false,
 ) {
     fun getFormatDate(): String {
         return date.toDateString()

@@ -123,6 +123,19 @@ fun EmptyView() {
 @Composable
 fun HomeMessageItemPreview() {
     WeChatTheme {
-        HomeMessageItem(HomeMessage(0, "", "Title", "Summary", System.currentTimeMillis(), 0, ""))
+        HomeMessageItem(
+            HomeMessage(
+                0,
+                "",
+                "Title",
+                "Summary",
+                0,
+                "",
+                0,
+                "",
+                0,
+                System.currentTimeMillis()
+            )
+        )
     }
 }

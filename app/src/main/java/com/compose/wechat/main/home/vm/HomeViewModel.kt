@@ -54,38 +54,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun provideMockList() = mutableListOf(
-        HomeMessage(0, "", "Title", "Summary", System.currentTimeMillis(), 0, "", isTopped = true),
-        HomeMessage(
-            0,
-            "",
-            "Title",
-            "Summary",
-            System.currentTimeMillis() - millsOfHour, 0, "",
-            isTopped = true
-        ),
-        HomeMessage(
-            0,
-            "",
-            "Title",
-            "Summary",
-            System.currentTimeMillis() - millsOfDay,
-            0,
-            "",
-            true
-        ),
-        HomeMessage(
-            0,
-            "",
-            "Title",
-            "Summary",
-            System.currentTimeMillis() - millsOfDay * 2,
-            0,
-            "",
-            true
-        )
-    )
-
     override fun onCleared() {
         super.onCleared()
         Log.d(TAG, "onCleared")

@@ -7,21 +7,31 @@
     <fragment
         android:id="@+id/main_home"
         android:name="com.compose.wechat.main.home.ui.HomeFragment"
-        android:label="@string/main_home"/>
+        android:label="@string/main_home" />
 
     <fragment
         android:id="@+id/main_friends"
         android:name="com.compose.wechat.main.friends.ui.FriendsFragment"
-        android:label="@string/main_friends"/>
+        android:label="@string/main_friends" />
 
     <fragment
         android:id="@+id/main_moments"
         android:name="com.compose.wechat.main.moments.ui.MomentsFragment"
-        android:label="@string/main_moments"/>
+        android:label="@string/main_moments" />
 
     <fragment
         android:id="@+id/main_profile"
         android:name="com.compose.wechat.main.profile.ui.ProfileFragment"
-        android:label="@string/main_profile"/>
+        android:label="@string/main_profile" />
+
+    <fragment
+        android:id="@+id/main_chat"
+        android:name="com.compose.wechat.main.chat.ui.ChatFragment"
+        android:label="@string/main_chat">
+        <argument
+            android:name="friend_id"
+            android:defaultValue="0"
+            app:argType="integer" />
+    </fragment>
 
 </navigation>

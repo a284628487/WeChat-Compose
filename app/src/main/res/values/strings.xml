@@ -4,5 +4,6 @@
     <string name="main_friends">通讯录</string>
     <string name="main_moments">发现</string>
     <string name="main_profile">我</string>
+    <string name="main_chat">聊天</string>
     <string name="empty_content">Nothing</string>
 </resources>
