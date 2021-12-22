@@ -60,10 +60,4 @@ class FriendsViewModel @Inject constructor(
         }
     }
 
-    fun refreshFriends() {
-        viewModelScope.launch {
-            delay(1000)
-            // _friendsLiveData.postValue(provideMockList())
-        }
-    }
 }

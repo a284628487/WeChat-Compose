@@ -9,6 +9,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.findNavController
 import com.compose.wechat.R
 import com.compose.wechat.main.home.vm.HomeViewModel
 import com.compose.wechat.ui.theme.WeChatTheme
@@ -39,11 +40,15 @@ class HomeFragment : Fragment() {
             )
             setContent {
                 WeChatTheme {
-                    // val messages = viewModel.messagesLiveData.observeAsState(emptyList())
                     val messages = viewModel.getMessagesFlow().collectAsState(initial = emptyList())
                     HomeMessageList(
                         messageList = messages.value
-                    )
+                    ) {
+                        findNavController().navigate(R.id.main_chat, Bundle().apply {
+                            putInt("friend_id", it.sessionId)
+                            putString("friend_name", it.getSessionName())
+                        })
+                    }
                     if (messages.value.isEmpty()) {
                         EmptyView()
                     }
@@ -54,6 +59,5 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.refreshMessages()
     }
 }

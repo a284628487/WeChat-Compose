@@ -19,6 +19,15 @@ data class HomeMessage(
     val muted: Boolean = false,
     val isTopped: Boolean = false,
 ) {
+
+    fun getSessionName(): String {
+        return if (sessionId == senderId) {
+            senderName
+        } else {
+            receiverName
+        }
+    }
+
     fun getFormatDate(): String {
         return date.toDateString()
     }

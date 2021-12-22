@@ -48,12 +48,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun refreshMessages() {
-        viewModelScope.launch {
-            delay(1000)
-        }
-    }
-
     override fun onCleared() {
         super.onCleared()
         Log.d(TAG, "onCleared")

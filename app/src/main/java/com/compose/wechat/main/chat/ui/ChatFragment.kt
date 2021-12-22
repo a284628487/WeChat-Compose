@@ -8,8 +8,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.compose.wechat.R
+import com.compose.wechat.main.chat.vm.ChatViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 
 @AndroidEntryPoint
 class ChatFragment : Fragment() {
@@ -35,7 +38,20 @@ class ChatFragment : Fragment() {
 
             setContent {
                 val list = chatViewModel.getMessages().collectAsState(initial = emptyList())
-                ChatList(list = list.value)
+                ChatList(list = list.value, {
+                    chatViewModel.removeMessage(it)
+                }, {
+                    if (it.isEmpty().not()) {
+                        chatViewModel.saveSendMessage(it)
+                    }
+                })
+                // for test
+                lifecycleScope.launchWhenStarted {
+                    delay(1200)
+                    if (list.value.isEmpty()) {
+                        chatViewModel.saveReceivedMessage("How are you?")
+                    }
+                }
             }
         }
     }

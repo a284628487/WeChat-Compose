@@ -1,4 +1,4 @@
-package com.compose.wechat.main.chat.ui
+package com.compose.wechat.main.chat.vm
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -65,6 +65,12 @@ class ChatViewModel @Inject constructor(application: Application, private val re
                     System.currentTimeMillis()
                 )
             )
+        }
+    }
+
+    fun removeMessage(message: HomeMessage) {
+        GlobalScope.launch {
+            repo.delete(message)
         }
     }
 }

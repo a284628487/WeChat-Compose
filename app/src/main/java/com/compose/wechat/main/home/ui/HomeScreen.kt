@@ -2,6 +2,7 @@ package com.compose.wechat.main.home.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Divider
@@ -22,18 +23,18 @@ import com.compose.wechat.entity.HomeMessage
 import com.compose.wechat.ui.theme.WeChatTheme
 
 @Composable
-fun HomeMessageList(messageList: List<HomeMessage>) {
+fun HomeMessageList(messageList: List<HomeMessage>, onMessageClick: (HomeMessage) -> Unit) {
     LazyColumn() {
         messageList.forEachIndexed { index, homeMessage ->
             item(key = index) {
-                HomeMessageItem(message = homeMessage)
+                HomeMessageItem(message = homeMessage, onMessageClick)
             }
         }
     }
 }
 
 @Composable
-fun HomeMessageItem(message: HomeMessage) {
+fun HomeMessageItem(message: HomeMessage, onMessageClick: (HomeMessage) -> Unit) {
     val backgroundColor = if (message.isTopped) {
         Color(0xFFEBEBEB)
     } else {
@@ -43,6 +44,9 @@ fun HomeMessageItem(message: HomeMessage) {
         modifier = Modifier
             .fillMaxWidth()
             .height(56.dp)
+            .clickable {
+                onMessageClick(message)
+            }
             .background(backgroundColor)
             .padding(horizontal = 8.dp)
             .padding(top = 8.dp)
@@ -136,6 +140,6 @@ fun HomeMessageItemPreview() {
                 0,
                 System.currentTimeMillis()
             )
-        )
+        ) {}
     }
 }
