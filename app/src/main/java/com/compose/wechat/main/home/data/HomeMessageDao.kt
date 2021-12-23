@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface HomeMessageDao : BaseDao<HomeMessage> {
 
-    @Query("SELECT * FROM HomeMessage GROUP BY sessionId ORDER BY date ASC")
+    @Query("SELECT * FROM HomeMessage GROUP BY sessionId having max(date) ORDER BY date DESC")
     fun query(): Flow<List<HomeMessage>>
 
     @Query("SELECT * FROM HomeMessage WHERE sessionId=:friendId ORDER BY date ASC")

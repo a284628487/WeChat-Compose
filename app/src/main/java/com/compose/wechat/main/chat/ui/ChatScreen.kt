@@ -8,10 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.*
@@ -34,17 +31,20 @@ fun ChatList(
     onSendClick: (String) -> Unit
 ) {
     Column {
-        LazyColumn(
+        Box(
             modifier = Modifier
                 .weight(1f)
+                .background(Color(0xFFEBEBEB))
                 .padding(top = 8.dp)
         ) {
-            list.forEachIndexed { index, message ->
-                item(key = index) {
-                    if (message.senderId == message.sessionId) {
-                        ChatMessageReceived(message = message, onLongPress = onLongPress)
-                    } else {
-                        ChatMessageSend(message = message, onLongPress = onLongPress)
+            LazyColumn() {
+                list.forEachIndexed { index, message ->
+                    item(key = index) {
+                        if (message.senderId == message.sessionId) {
+                            ChatMessageReceived(message = message, onLongPress = onLongPress)
+                        } else {
+                            ChatMessageSend(message = message, onLongPress = onLongPress)
+                        }
                     }
                 }
             }
@@ -67,18 +67,21 @@ fun ChatMessageReceived(message: HomeMessage, onLongPress: (HomeMessage) -> Unit
                 .size(36.dp, 36.dp)
                 .clip(MaterialTheme.shapes.medium),
         )
-        Text(
-            text = message.summary, modifier = Modifier
-                .offset(x = 8.dp)
-                .pointerInput(Unit) {
-                    detectTapGestures(onLongPress = {
-                        onLongPress(message)
-                    })
-                }
-                .background(Color.Cyan)
-                .wrapContentSize()
-                .padding(8.dp)
-        )
+        Surface(modifier = Modifier
+            .offset(x = 8.dp)
+            .pointerInput(Unit) {
+                detectTapGestures(onLongPress = {
+                    onLongPress(message)
+                })
+            }
+            .wrapContentSize(),
+            shape = MaterialTheme.shapes.medium,
+            color = Color.White,
+            elevation = 1.dp) {
+            Text(
+                text = message.summary, modifier = Modifier.padding(8.dp)
+            )
+        }
     }
 }
 
@@ -107,22 +110,24 @@ fun ChatMessageSend(message: HomeMessage, onLongPress: (HomeMessage) -> Unit) {
                 top.linkTo(parent.top)
                 end.linkTo(icon.start)
             })
-        Text(
-            text = message.summary, modifier = Modifier
-                .pointerInput(Unit) {
-                    detectTapGestures(onLongPress = {
-                        Log.e("TAGGG", "LongPress")
-                        onLongPress(message)
-                    })
-                }
-                .background(Color.Cyan)
-                .wrapContentWidth(Alignment.End)
-                .padding(8.dp)
-                .constrainAs(messageText) {
-                    top.linkTo(parent.top)
-                    end.linkTo(spacer.start)
-                }
-        )
+        Surface(modifier = Modifier
+            .pointerInput(Unit) {
+                detectTapGestures(onLongPress = {
+                    onLongPress(message)
+                })
+            }
+            .wrapContentWidth(Alignment.End)
+            .constrainAs(messageText) {
+                top.linkTo(parent.top)
+                end.linkTo(spacer.start)
+            }, shape = MaterialTheme.shapes.medium,
+            color = Color.White,
+            elevation = 1.dp
+        ) {
+            Text(
+                text = message.summary, modifier = Modifier.padding(8.dp)
+            )
+        }
     }
 }
 
@@ -150,9 +155,9 @@ fun SendMessageInput(modifier: Modifier, onSendClick: (String) -> Unit) {
     var text by remember { mutableStateOf("") }
     Box(
         modifier = modifier
-            .padding(16.dp)
-            .wrapContentHeight()
-            .background(Color(0xFFD3D3D3)),
+            .background(Color(0xFFD3D3D3))
+            .padding(horizontal = 10.dp, vertical = 6.dp)
+            .wrapContentHeight(),
         contentAlignment = Alignment.Center
     ) {
         BasicTextField(
@@ -180,6 +185,7 @@ fun SendMessageInput(modifier: Modifier, onSendClick: (String) -> Unit) {
                             onSendClick(text)
                             text = ""
                         },
+                        enabled = text.isEmpty().not()
                     ) {
                         Icon(Icons.Filled.Send, null)
                     }
