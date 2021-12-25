@@ -7,6 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.compose.wechat.entity.HomeMessage
 import com.compose.wechat.main.home.data.IHomeMessageRepo
+import com.compose.wechat.utils.logd
 import com.compose.wechat.utils.millsOfDay
 import com.compose.wechat.utils.millsOfHour
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,8 +23,8 @@ class HomeViewModel @Inject constructor(
     private val state: SavedStateHandle
 ) : AndroidViewModel(application) {
 
-    companion object {
-        const val TAG = "HomeViewModel"
+    init {
+        logd<HomeViewModel>("init")
     }
 
     fun getMessagesFlow(): Flow<List<HomeMessage>> {
@@ -50,6 +51,6 @@ class HomeViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        Log.d(TAG, "onCleared")
+        logd<HomeViewModel>("onCleared")
     }
 }

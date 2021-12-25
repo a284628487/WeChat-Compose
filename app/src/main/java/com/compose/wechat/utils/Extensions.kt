@@ -1,5 +1,6 @@
 package com.compose.wechat.utils
 
+import android.util.Log
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -21,4 +22,16 @@ fun Long.toDateString(): String {
         return "昨天"
     }
     return dateFormatMonthDay.format(Date(this))
+}
+
+inline fun <reified T> logd(message: Any) {
+    Log.d("${T::class.simpleName}", "$message")
+}
+
+inline fun <reified T> logi(message: Any) {
+    Log.i("${T::class.simpleName}", "$message")
+}
+
+inline fun <reified T> loge(message: Any) {
+    Log.e("${T::class.simpleName}", "$message")
 }
