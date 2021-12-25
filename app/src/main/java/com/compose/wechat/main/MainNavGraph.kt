@@ -55,7 +55,29 @@ fun MainNavGraph() {
         Log.d("NavHost", "compose")
         composable(Router.MAIN) {
             Log.d("Main", "compose")
-            MainPage(navController, indexState)
+            val navList = mutableListOf(
+                NavItem(
+                    stringResource(id = R.string.main_home),
+                    Router.MESSAGE,
+                    R.drawable.ic_main_home
+                ),
+                NavItem(
+                    stringResource(id = R.string.main_friends),
+                    Router.FRIENDS,
+                    R.drawable.ic_main_friends
+                ),
+                NavItem(
+                    stringResource(id = R.string.main_moments),
+                    Router.MOMENTS,
+                    R.drawable.ic_main_moments
+                ),
+                NavItem(
+                    stringResource(id = R.string.main_profile),
+                    Router.PROFILE,
+                    R.drawable.ic_main_profile
+                )
+            )
+            MainPage(navController, navList, indexState)
         }
         composable(Router.LAUNCH) {
             Log.d("Launch", "compose")
@@ -89,31 +111,17 @@ fun MainNavGraph() {
 data class NavItem(val name: String, val route: String, val resId: Int)
 
 @Composable
-fun MainPage(navController: NavHostController, indexState: MutableState<Int>) {
-    val navList = mutableListOf(
-        NavItem(stringResource(id = R.string.main_home), Router.MESSAGE, R.drawable.ic_main_home),
-        NavItem(
-            stringResource(id = R.string.main_friends),
-            Router.FRIENDS,
-            R.drawable.ic_main_friends
-        ),
-        NavItem(
-            stringResource(id = R.string.main_moments),
-            Router.MOMENTS,
-            R.drawable.ic_main_moments
-        ),
-        NavItem(
-            stringResource(id = R.string.main_profile),
-            Router.PROFILE,
-            R.drawable.ic_main_profile
-        )
-    )
+fun MainPage(
+    navController: NavHostController,
+    navList: List<NavItem>,
+    indexState: MutableState<Int>
+) {
     Scaffold(
         bottomBar = {
             BottomBar(navList = navList, indexState)
         }
     ) {
-        Log.d("MainPage", "index = ${indexState.value}")
+        Log.d("MainPage", "compose = ${indexState.value}")
         if (indexState.value == 0) {
             Log.d("Message", "compose")
             val homeViewModel = hiltViewModel<HomeViewModel>()
@@ -122,9 +130,6 @@ fun MainPage(navController: NavHostController, indexState: MutableState<Int>) {
                 messageList = messages.value
             ) {
                 navController.navigate("${Router.CHAT}/${it.sessionId}/${it.getSessionName()}")
-            }
-            if (messages.value.isEmpty()) {
-                EmptyView()
             }
         } else if (indexState.value == 1) {
             Log.d("Friends", "compose")
@@ -181,7 +186,7 @@ fun BottomBar(navList: List<NavItem>, selectedIndex: MutableState<Int>) {
 @Composable
 fun MainPagePreview() {
     WeChatTheme() {
-        MainPage(rememberNavController(), remember {
+        MainPage(rememberNavController(), emptyList(), remember {
             mutableStateOf(0)
         })
     }

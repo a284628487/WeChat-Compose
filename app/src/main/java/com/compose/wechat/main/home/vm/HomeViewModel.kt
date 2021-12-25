@@ -1,17 +1,13 @@
 package com.compose.wechat.main.home.vm
 
 import android.app.Application
-import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.compose.wechat.base.BaseViewModel
 import com.compose.wechat.entity.HomeMessage
 import com.compose.wechat.main.home.data.IHomeMessageRepo
 import com.compose.wechat.utils.logd
-import com.compose.wechat.utils.millsOfDay
-import com.compose.wechat.utils.millsOfHour
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -21,11 +17,7 @@ class HomeViewModel @Inject constructor(
     application: Application,
     private val repo: IHomeMessageRepo,
     private val state: SavedStateHandle
-) : AndroidViewModel(application) {
-
-    init {
-        logd<HomeViewModel>("init")
-    }
+) : BaseViewModel(application) {
 
     fun getMessagesFlow(): Flow<List<HomeMessage>> {
         return repo.query()
@@ -49,8 +41,4 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        logd<HomeViewModel>("onCleared")
-    }
 }

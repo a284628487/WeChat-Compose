@@ -24,10 +24,14 @@ import com.compose.wechat.ui.theme.WeChatTheme
 
 @Composable
 fun HomeMessageList(messageList: List<HomeMessage>, onMessageClick: (HomeMessage) -> Unit) {
-    LazyColumn() {
-        messageList.forEachIndexed { index, homeMessage ->
-            item(key = index) {
-                HomeMessageItem(message = homeMessage, onMessageClick)
+    if (messageList.isEmpty()) {
+        EmptyView()
+    } else {
+        LazyColumn {
+            messageList.forEachIndexed { index, homeMessage ->
+                item(key = index) {
+                    HomeMessageItem(message = homeMessage, onMessageClick)
+                }
             }
         }
     }

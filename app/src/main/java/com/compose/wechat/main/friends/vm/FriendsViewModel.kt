@@ -1,18 +1,19 @@
 package com.compose.wechat.main.friends.vm
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.compose.wechat.base.BaseViewModel
 import com.compose.wechat.entity.Friend
 import com.compose.wechat.entity.FriendIndexGroup
 import com.compose.wechat.entity.IFriendItem
 import com.compose.wechat.main.friends.data.IFriendsRepo
-import com.compose.wechat.utils.logd
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,11 +22,7 @@ class FriendsViewModel @Inject constructor(
     application: Application,
     private val repo: IFriendsRepo,
     private val state: SavedStateHandle
-) : AndroidViewModel(application) {
-
-    init {
-        logd<FriendsViewModel>("init")
-    }
+) : BaseViewModel(application) {
 
     fun getFriendsFlow(): Flow<List<IFriendItem>> {
         return repo.query().flatMapConcat { list ->
@@ -63,11 +60,6 @@ class FriendsViewModel @Inject constructor(
         viewModelScope.launch {
             val result = repo.save(friend = friend)
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        logd<FriendsViewModel>("onCleared")
     }
 
 }

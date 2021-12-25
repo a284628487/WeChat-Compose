@@ -1,8 +1,8 @@
 package com.compose.wechat.main.chat.vm
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
+import com.compose.wechat.base.BaseViewModel
 import com.compose.wechat.entity.HomeMessage
 import com.compose.wechat.main.chat.data.IChatRepo
 import com.compose.wechat.utils.logd
@@ -14,13 +14,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ChatViewModel @Inject constructor(
-    application: Application, private val repo: IChatRepo,
+    application: Application,
+    private val repo: IChatRepo,
     state: SavedStateHandle
-) :
-    AndroidViewModel(application) {
+) : BaseViewModel(application) {
 
     init {
-        logd<ChatViewModel>("init")
         val id = state.get<Int>("id")
         val name = state.get<String>("name")
         logd<ChatViewModel>("id: ${id}, name: ${name}")
@@ -83,10 +82,5 @@ class ChatViewModel @Inject constructor(
         GlobalScope.launch {
             repo.delete(message)
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        logd<ChatViewModel>("onCleared")
     }
 }
