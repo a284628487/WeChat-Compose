@@ -2,15 +2,14 @@ package com.compose.wechat.main
 
 import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -90,20 +89,35 @@ fun MainNavGraph() {
             arguments = listOf(navArgument("id") { type = NavType.IntType },
                 navArgument("name") { type = NavType.StringType })
         ) {
+            Log.d("Chat", "compose")
             val id = it.arguments?.getInt("id")
             val name = it.arguments?.getString("name")
-            Log.d("Chat", "compose")
 
             val chatViewModel = hiltViewModel<ChatViewModel>()
-            chatViewModel.setup(id ?: 0, name ?: "")
             val list = chatViewModel.getMessages().collectAsState(initial = emptyList())
-            ChatList(list = list.value, {
-                chatViewModel.removeMessage(it)
-            }, {
-                if (it.isEmpty().not()) {
-                    chatViewModel.saveSendMessage(it)
+            Scaffold(topBar = {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(48.dp)
+                        .background(MaterialTheme.colors.primary),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = chatViewModel.getSessionName(),
+                        color = MaterialTheme.colors.onPrimary,
+                        textAlign = TextAlign.Center
+                    )
                 }
-            })
+            }) {
+                ChatList(list = list.value, {
+                    chatViewModel.removeMessage(it)
+                }, {
+                    if (it.isEmpty().not()) {
+                        chatViewModel.saveSendMessage(it)
+                    }
+                })
+            }
         }
     }
 }
@@ -135,7 +149,7 @@ fun MainPage(
             Log.d("Friends", "compose")
             val friendsViewModel = hiltViewModel<FriendsViewModel>()
             val friends = friendsViewModel.getFriendsFlow().collectAsState(emptyList())
-            FriendList(friendList = friends.value) {
+            FriendList(friendList = friends.value, modifier = Modifier.padding(bottom = 56.dp)) {
                 navController.navigate("${Router.CHAT}/${it.id}/${it.name}")
             }
         } else if (indexState.value == 2) {

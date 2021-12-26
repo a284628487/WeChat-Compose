@@ -19,17 +19,21 @@ class ChatViewModel @Inject constructor(
     state: SavedStateHandle
 ) : BaseViewModel(application) {
 
-    init {
-        val id = state.get<Int>("id")
-        val name = state.get<String>("name")
-        logd<ChatViewModel>("id: ${id}, name: ${name}")
-    }
-
-    private var senderName: String = ""
     private var senderId: Int = 0
+    private var senderName: String = ""
 
     private val myName: String = "God"
     private val myId: Int = Int.MAX_VALUE / 1000
+
+    init {
+        val id = state.get<Int>("id") ?: 0
+        val name = state.get<String>("name") ?: ""
+        logd<ChatViewModel>("id: ${id}, name: ${name}")
+        if (id != 0) {
+            senderId = id
+            senderName = name
+        }
+    }
 
     fun setup(id: Int, name: String) {
         this.senderId = id
@@ -38,6 +42,10 @@ class ChatViewModel @Inject constructor(
 
     fun getMessages(): Flow<List<HomeMessage>> {
         return repo.query(senderId)
+    }
+
+    fun getSessionName(): String {
+        return senderName
     }
 
     fun saveReceivedMessage(message: String) {

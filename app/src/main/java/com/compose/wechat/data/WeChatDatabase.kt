@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.compose.wechat.entity.Friend
 import com.compose.wechat.entity.HomeMessage
@@ -13,7 +14,7 @@ import com.compose.wechat.main.home.data.HomeMessageDao
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Database(entities = [HomeMessage::class, Friend::class], version = 1, exportSchema = false)
+@Database(entities = [HomeMessage::class, Friend::class], version = 2, exportSchema = false)
 abstract class WeChatDatabase : RoomDatabase() {
 
     companion object {
@@ -39,6 +40,10 @@ abstract class WeChatDatabase : RoomDatabase() {
                                     it.friendsDao().saveAll(initialFriendsList())
                                 }
                             }
+                        }
+                    }).addMigrations(object : Migration(1, 2) {
+                        override fun migrate(database: SupportSQLiteDatabase) {
+                            database.execSQL("ALTER TABLE Friend ADD route TEXT DEFAULT NULL")
                         }
                     }).build()
                 }

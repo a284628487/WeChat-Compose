@@ -24,8 +24,12 @@ import com.compose.wechat.entity.IFriendItem
 import com.compose.wechat.ui.theme.WeChatTheme
 
 @Composable
-fun FriendList(friendList: List<IFriendItem>, onFriendItemClicked: (Friend) -> Unit) {
-    LazyColumn() {
+fun FriendList(
+    friendList: List<IFriendItem>,
+    modifier: Modifier = Modifier,
+    onFriendItemClicked: (Friend) -> Unit
+) {
+    LazyColumn(modifier = modifier) {
         friendList.forEachIndexed { index, iFriendItem ->
             item(key = index) {
                 if (iFriendItem is Friend) {

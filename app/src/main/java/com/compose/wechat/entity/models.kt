@@ -40,7 +40,8 @@ data class Friend(
     @PrimaryKey val id: Int = 0,
     val iconUrl: String,
     val name: String,
-    val index: Char
+    val index: Char,
+    val route: String? = null
 ) : IFriendItem
 
 data class FriendIndexGroup(val name: String) : IFriendItem
