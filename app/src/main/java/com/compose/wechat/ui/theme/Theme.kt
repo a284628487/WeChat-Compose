@@ -44,6 +44,8 @@ val MaterialTheme.themeMode
     @ReadOnlyComposable
     get() = LocalThemeMode.current
 
+var isLaunchScreenShowed = false
+
 @Composable
 fun WeChatTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
     val welcomeAssets = if (darkTheme) DarkThemeMode else LightThemeMode

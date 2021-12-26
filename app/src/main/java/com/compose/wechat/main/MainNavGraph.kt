@@ -4,6 +4,10 @@ import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,12 +28,10 @@ import com.compose.wechat.main.chat.ui.ChatList
 import com.compose.wechat.main.chat.vm.ChatViewModel
 import com.compose.wechat.main.friends.ui.FriendList
 import com.compose.wechat.main.friends.vm.FriendsViewModel
-import com.compose.wechat.main.home.ui.EmptyView
 import com.compose.wechat.main.home.ui.HomeMessageList
 import com.compose.wechat.main.home.vm.HomeViewModel
 import com.compose.wechat.ui.theme.WeChatTheme
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.compose.wechat.ui.theme.isLaunchScreenShowed
 
 object Router {
     const val LAUNCH = "launch"
@@ -50,39 +52,41 @@ fun MainNavGraph() {
         mutableStateOf(0)
     }
 
-    NavHost(navController = navController, startDestination = Router.LAUNCH) {
+    NavHost(navController = navController, startDestination = Router.MAIN) {
         Log.d("NavHost", "compose")
         composable(Router.MAIN) {
-            Log.d("Main", "compose")
-            val navList = mutableListOf(
-                NavItem(
-                    stringResource(id = R.string.main_home),
-                    Router.MESSAGE,
-                    R.drawable.ic_main_home
-                ),
-                NavItem(
-                    stringResource(id = R.string.main_friends),
-                    Router.FRIENDS,
-                    R.drawable.ic_main_friends
-                ),
-                NavItem(
-                    stringResource(id = R.string.main_moments),
-                    Router.MOMENTS,
-                    R.drawable.ic_main_moments
-                ),
-                NavItem(
-                    stringResource(id = R.string.main_profile),
-                    Router.PROFILE,
-                    R.drawable.ic_main_profile
+            if (isLaunchScreenShowed) {
+                Log.d("Main", "compose")
+                val navList = mutableListOf(
+                    NavItem(
+                        stringResource(id = R.string.main_home),
+                        Router.MESSAGE,
+                        R.drawable.ic_main_home
+                    ),
+                    NavItem(
+                        stringResource(id = R.string.main_friends),
+                        Router.FRIENDS,
+                        R.drawable.ic_main_friends
+                    ),
+                    NavItem(
+                        stringResource(id = R.string.main_moments),
+                        Router.MOMENTS,
+                        R.drawable.ic_main_moments
+                    ),
+                    NavItem(
+                        stringResource(id = R.string.main_profile),
+                        Router.PROFILE,
+                        R.drawable.ic_main_profile
+                    )
                 )
-            )
-            MainPage(navController, navList, indexState)
+                MainPage(navController, navList, indexState)
+            } else {
+                navController.navigate(Router.LAUNCH)
+            }
         }
         composable(Router.LAUNCH) {
             Log.d("Launch", "compose")
-            Button(onClick = { navController.navigate(Router.MAIN) }) {
-                Text(text = "Go to Main")
-            }
+            LaunchScreen(navController = navController)
         }
         composable(
             "${Router.CHAT}/{id}/{name}",
@@ -106,8 +110,14 @@ fun MainNavGraph() {
                     Text(
                         text = chatViewModel.getSessionName(),
                         color = MaterialTheme.colors.onPrimary,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.h6
                     )
+                }
+                IconButton(onClick = {
+                    navController.popBackStack()
+                }) {
+                    Icon(Icons.Filled.ArrowBack, null, tint = MaterialTheme.colors.onPrimary)
                 }
             }) {
                 ChatList(list = list.value, {
@@ -128,9 +138,25 @@ data class NavItem(val name: String, val route: String, val resId: Int)
 fun MainPage(
     navController: NavHostController,
     navList: List<NavItem>,
-    indexState: MutableState<Int>
+    indexState: MutableState<Int>,
+    onMainSearchClick: () -> Unit = {},
+    onMainAddClick: () -> Unit = {}
 ) {
     Scaffold(
+        topBar = {
+            if (indexState.value != 3) {
+                TopAppBar(title = {
+                    Text(text = navList[indexState.value].name)
+                }, actions = {
+                    IconButton(onClick = onMainSearchClick) {
+                        Icon(Icons.Filled.Search, null, tint = MaterialTheme.colors.onPrimary)
+                    }
+                    IconButton(onClick = onMainAddClick) {
+                        Icon(Icons.Filled.Add, null, tint = MaterialTheme.colors.onPrimary)
+                    }
+                })
+            }
+        },
         bottomBar = {
             BottomBar(navList = navList, indexState)
         }
