@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -67,34 +68,10 @@ fun FriendsIndexes(scope: BoxScope) {
     }
     scope.apply {
         val indexArray = arrayOf(
-            "*",
-            "A",
-            "B",
-            "C",
-            "D",
-            "E",
-            "F",
-            "G",
-            "H",
-            "I",
-            "J",
-            "K",
-            "L",
-            "M",
-            "N",
-            "O",
-            "P",
-            "Q",
-            "R",
-            "S",
-            "T",
-            "U",
-            "V",
-            "W",
-            "X",
-            "Y",
-            "Z",
-            "#"
+            "*", "A", "B", "C", "D", "E", "F",
+            "G", "H", "I", "J", "K", "L", "M",
+            "N", "O", "P", "Q", "R", "S", "T",
+            "U", "V", "W", "X", "Y", "Z", "#"
         )
         Row(
             modifier = Modifier
@@ -102,21 +79,27 @@ fun FriendsIndexes(scope: BoxScope) {
                 .width(68.dp)
                 .align(Alignment.CenterEnd)
         ) {
-            Box(
+            Column(
                 modifier = Modifier
-                    .background(Color.LightGray)
                     .fillMaxHeight()
                     .width(48.dp)
             ) {
                 scrollIndicate.value.index?.let {
+                    Divider(
+                        modifier = Modifier
+                            .height((scrollIndicate.value.y / density + 6).dp)
+                            .width(0.dp)
+                            .background(Color.Transparent)
+                    )
                     Text(
                         text = it,
                         modifier = Modifier
-                            .padding(start = 8.dp, end = 8.dp)
+                            .padding(start = 8.dp, end = 8.dp, top = 1.dp)
                             .width(32.dp)
                             .height(32.dp)
-                            .background(Color.Red)
-                            .offset(y = (scrollIndicate.value.y / density + 6).dp),
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(MaterialTheme.colors.primary),
+                        color = MaterialTheme.colors.onPrimary,
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.h6
                     )
@@ -131,17 +114,15 @@ fun FriendsIndexes(scope: BoxScope) {
                             scrollIndicate.value = IndexTouchIndicate()
                         } else {
                             var index = (it.y / singleHeight).toInt()
+                            var y = it.y
                             if (index >= indexArray.size) {
                                 index = indexArray.size - 1
+                                y = (index + 1) * singleHeight.toFloat()
                             }
                             if (index < 0) {
                                 index = 0
                             }
-                            scrollIndicate.value = IndexTouchIndicate(it.y, indexArray[index])
-                            Log.d(
-                                "TAGGG",
-                                "touch: ${singleHeight}, ${it.y}, ${indexArray[index]}"
-                            )
+                            scrollIndicate.value = IndexTouchIndicate(y, indexArray[index])
                         }
                         true
                     }
