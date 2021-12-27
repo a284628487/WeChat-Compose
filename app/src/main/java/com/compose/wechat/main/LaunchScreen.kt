@@ -20,7 +20,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun LaunchScreen(navController: NavHostController) {
     LaunchedEffect(key1 = "popBackStack", block = {
-        delay(400)
+        delay(800)
         isLaunchScreenShowed = true
         navController.popBackStack()
     })

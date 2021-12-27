@@ -10,32 +10,95 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.compose.wechat.R
 import com.compose.wechat.entity.Friend
 import com.compose.wechat.entity.FriendIndexGroup
 import com.compose.wechat.entity.IFriendItem
 import com.compose.wechat.ui.theme.WeChatTheme
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun FriendList(
     friendList: List<IFriendItem>,
     modifier: Modifier = Modifier,
     onFriendItemClicked: (Friend) -> Unit
 ) {
-    LazyColumn(modifier = modifier) {
-        friendList.forEachIndexed { index, iFriendItem ->
-            item(key = index) {
-                if (iFriendItem is Friend) {
-                    FriendItem(friend = iFriendItem, onFriendItemClicked)
-                } else {
-                    FriendIndexGroupItem(group = iFriendItem as FriendIndexGroup)
+    Box(modifier = modifier) {
+        LazyColumn() {
+            friendList.forEachIndexed { index, iFriendItem ->
+                item(key = index) {
+                    if (iFriendItem is Friend) {
+                        FriendItem(friend = iFriendItem, onFriendItemClicked)
+                    } else {
+                        FriendIndexGroupItem(group = iFriendItem as FriendIndexGroup)
+                    }
+                }
+            }
+        }
+        val indexArray = arrayOf(
+            "*",
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I",
+            "J",
+            "K",
+            "L",
+            "M",
+            "N",
+            "O",
+            "P",
+            "Q",
+            "R",
+            "S",
+            "T",
+            "U",
+            "V",
+            "W",
+            "X",
+            "Y",
+            "Z",
+            "#"
+        )
+        Box(
+            modifier = Modifier
+                .align(Alignment.CenterEnd)
+                .width(20.dp)
+                .pointerInteropFilter {
+                    // TODO
+                    true
+                }
+        ) {
+            Column(
+                modifier = Modifier
+                    .wrapContentHeight()
+                    .align(Alignment.Center)
+            ) {
+                indexArray.forEachIndexed { index, s ->
+                    Text(
+                        text = s,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 1.dp),
+                        textAlign = TextAlign.Center,
+                        style = TextStyle(fontSize = 8.sp)
+                    )
                 }
             }
         }

@@ -45,3 +45,9 @@ data class Friend(
 ) : IFriendItem
 
 data class FriendIndexGroup(val name: String) : IFriendItem
+
+data class UiState<T>(
+    val data: T? = null,
+    val loading: Boolean = false,
+    val refreshError: Boolean = false
+)

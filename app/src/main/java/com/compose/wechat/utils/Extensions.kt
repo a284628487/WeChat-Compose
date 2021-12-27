@@ -1,6 +1,11 @@
 package com.compose.wechat.utils
 
 import android.util.Log
+import android.view.MotionEvent
+import androidx.compose.runtime.MutableState
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInteropFilter
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -35,3 +40,15 @@ inline fun <reified T> logi(message: Any) {
 inline fun <reified T> loge(message: Any) {
     Log.e("${T::class.simpleName}", "$message")
 }
+
+@OptIn(ExperimentalComposeUiApi::class)
+fun Modifier.touchSwitchState(mutableState: MutableState<Boolean>): Modifier =
+    this.pointerInteropFilter {
+        if (it.action == MotionEvent.ACTION_DOWN) {
+            if (mutableState.value) {
+                mutableState.value = false
+                return@pointerInteropFilter true
+            }
+        }
+        false
+    }

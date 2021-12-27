@@ -20,17 +20,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.compose.wechat.R
 import com.compose.wechat.entity.HomeMessage
+import com.compose.wechat.entity.UiState
 import com.compose.wechat.ui.theme.WeChatTheme
 
 @Composable
-fun HomeMessageList(messageList: List<HomeMessage>, onMessageClick: (HomeMessage) -> Unit) {
-    if (messageList.isEmpty()) {
-        EmptyView()
+fun HomeMessageList(uiState: UiState<List<HomeMessage>>, onMessageClick: (HomeMessage) -> Unit) {
+    if (uiState.loading) {
+        // nothing
     } else {
-        LazyColumn {
-            messageList.forEachIndexed { index, homeMessage ->
-                item(key = index) {
-                    HomeMessageItem(message = homeMessage, onMessageClick)
+        if (uiState.data.isNullOrEmpty()) {
+            EmptyView()
+        } else {
+            LazyColumn {
+                uiState.data.forEachIndexed { index, homeMessage ->
+                    item(key = index) {
+                        HomeMessageItem(message = homeMessage, onMessageClick)
+                    }
                 }
             }
         }

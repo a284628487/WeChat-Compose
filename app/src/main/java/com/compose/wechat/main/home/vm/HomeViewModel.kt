@@ -5,10 +5,13 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.compose.wechat.base.BaseViewModel
 import com.compose.wechat.entity.HomeMessage
+import com.compose.wechat.entity.UiState
 import com.compose.wechat.main.home.data.IHomeMessageRepo
 import com.compose.wechat.utils.logd
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,8 +22,18 @@ class HomeViewModel @Inject constructor(
     private val state: SavedStateHandle
 ) : BaseViewModel(application) {
 
-    fun getMessagesFlow(): Flow<List<HomeMessage>> {
-        return repo.query()
+    private val _uiState = MutableStateFlow<UiState<List<HomeMessage>>>(UiState(loading = true))
+
+    init {
+        viewModelScope.launch {
+            repo.query().collect {
+                _uiState.emit(UiState(it, false))
+            }
+        }
+    }
+
+    fun getMessagesFlow(): Flow<UiState<List<HomeMessage>>> {
+        return _uiState
     }
 
     fun update(message: HomeMessage) {

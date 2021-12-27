@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import com.compose.wechat.R
+import com.compose.wechat.entity.UiState
 import com.compose.wechat.main.home.vm.HomeViewModel
 import com.compose.wechat.ui.theme.WeChatTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,17 +41,15 @@ class HomeFragment : Fragment() {
             )
             setContent {
                 WeChatTheme {
-                    val messages = viewModel.getMessagesFlow().collectAsState(initial = emptyList())
+                    val uiState =
+                        viewModel.getMessagesFlow().collectAsState(UiState(loading = true))
                     HomeMessageList(
-                        messageList = messages.value
+                        uiState = uiState.value
                     ) {
                         findNavController().navigate(R.id.main_chat, Bundle().apply {
                             putInt("friend_id", it.sessionId)
                             putString("friend_name", it.getSessionName())
                         })
-                    }
-                    if (messages.value.isEmpty()) {
-                        EmptyView()
                     }
                 }
             }

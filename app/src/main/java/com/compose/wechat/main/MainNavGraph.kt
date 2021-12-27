@@ -2,6 +2,7 @@ package com.compose.wechat.main
 
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -10,7 +11,9 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -24,6 +27,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
 import com.compose.wechat.R
+import com.compose.wechat.entity.UiState
 import com.compose.wechat.main.chat.ui.ChatList
 import com.compose.wechat.main.chat.vm.ChatViewModel
 import com.compose.wechat.main.friends.ui.FriendList
@@ -32,6 +36,7 @@ import com.compose.wechat.main.home.ui.HomeMessageList
 import com.compose.wechat.main.home.vm.HomeViewModel
 import com.compose.wechat.ui.theme.WeChatTheme
 import com.compose.wechat.ui.theme.isLaunchScreenShowed
+import com.compose.wechat.utils.touchSwitchState
 
 object Router {
     const val LAUNCH = "launch"
@@ -139,63 +144,88 @@ fun MainPage(
     navController: NavHostController,
     navList: List<NavItem>,
     indexState: MutableState<Int>,
-    onMainSearchClick: () -> Unit = {},
-    onMainAddClick: () -> Unit = {}
+    onMainSearchClick: () -> Unit = {}
 ) {
+    val showAddPanelState = remember {
+        mutableStateOf(false)
+    }
     Scaffold(
+        modifier = Modifier.pointerInput(Unit) {
+            detectTapGestures(onPress = {
+                showAddPanelState.value = false
+            })
+        },
         topBar = {
             if (indexState.value != 3) {
                 TopAppBar(title = {
                     Text(text = navList[indexState.value].name)
-                }, actions = {
+                }, modifier = Modifier.touchSwitchState(showAddPanelState), actions = {
                     IconButton(onClick = onMainSearchClick) {
                         Icon(Icons.Filled.Search, null, tint = MaterialTheme.colors.onPrimary)
                     }
-                    IconButton(onClick = onMainAddClick) {
+                    IconButton(onClick = {
+                        showAddPanelState.value = true
+                    }) {
                         Icon(Icons.Filled.Add, null, tint = MaterialTheme.colors.onPrimary)
                     }
                 })
             }
         },
         bottomBar = {
-            BottomBar(navList = navList, indexState)
+            BottomBar(navList = navList, indexState, showAddPanelState)
         }
     ) {
         Log.d("MainPage", "compose = ${indexState.value}")
-        if (indexState.value == 0) {
-            Log.d("Message", "compose")
-            val homeViewModel = hiltViewModel<HomeViewModel>()
-            val messages = homeViewModel.getMessagesFlow().collectAsState(initial = emptyList())
-            HomeMessageList(
-                messageList = messages.value
-            ) {
-                navController.navigate("${Router.CHAT}/${it.sessionId}/${it.getSessionName()}")
+        Box(modifier = Modifier.touchSwitchState(showAddPanelState)) {
+            if (indexState.value == 0) {
+                Log.d("Message", "compose")
+                val homeViewModel = hiltViewModel<HomeViewModel>()
+                val uiState =
+                    homeViewModel.getMessagesFlow().collectAsState(UiState(loading = true))
+                HomeMessageList(
+                    uiState = uiState.value
+                ) {
+                    navController.navigate("${Router.CHAT}/${it.sessionId}/${it.getSessionName()}")
+                }
+            } else if (indexState.value == 1) {
+                Log.d("Friends", "compose")
+                val friendsViewModel = hiltViewModel<FriendsViewModel>()
+                val friends = friendsViewModel.getFriendsFlow().collectAsState(emptyList())
+                FriendList(
+                    friendList = friends.value,
+                    modifier = Modifier.padding(bottom = 56.dp)
+                ) {
+                    navController.navigate("${Router.CHAT}/${it.id}/${it.name}")
+                }
+            } else if (indexState.value == 2) {
+                Log.d("Moments", "compose")
+                Text(text = "22222", modifier = Modifier.padding(10.dp))
+            } else {
+                Log.d("Profile", "compose")
+                Text(text = "33333", modifier = Modifier.padding(10.dp))
             }
-        } else if (indexState.value == 1) {
-            Log.d("Friends", "compose")
-            val friendsViewModel = hiltViewModel<FriendsViewModel>()
-            val friends = friendsViewModel.getFriendsFlow().collectAsState(emptyList())
-            FriendList(friendList = friends.value, modifier = Modifier.padding(bottom = 56.dp)) {
-                navController.navigate("${Router.CHAT}/${it.id}/${it.name}")
+            //
+            if (showAddPanelState.value) {
+                AddPanel(showAddPanelState)
             }
-        } else if (indexState.value == 2) {
-            Log.d("Moments", "compose")
-            Text(text = "22222", modifier = Modifier.padding(10.dp))
-        } else {
-            Log.d("Profile", "compose")
-            Text(text = "33333", modifier = Modifier.padding(10.dp))
         }
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun BottomBar(navList: List<NavItem>, selectedIndex: MutableState<Int>) {
+fun BottomBar(
+    navList: List<NavItem>,
+    selectedIndex: MutableState<Int>,
+    addPanelShowState: MutableState<Boolean>,
+) {
     BottomNavigation(
         elevation = 16.dp,
         modifier = Modifier
             .fillMaxWidth()
             .height(56.dp)
             .background(MaterialTheme.colors.primary)
+            .touchSwitchState(addPanelShowState)
     ) {
         navList.forEachIndexed { index, it ->
             BottomNavigationItem(
