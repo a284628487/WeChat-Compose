@@ -1,5 +1,7 @@
 package com.compose.wechat.main.friends.ui
 
+import android.util.Log
+import android.view.MotionEvent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -9,12 +11,15 @@ import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInteropFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -46,6 +51,21 @@ fun FriendList(
                 }
             }
         }
+        FriendsIndexes(scope = this)
+    }
+}
+
+internal data class IndexTouchIndicate(val y: Float = 0F, val index: String? = null)
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+fun FriendsIndexes(scope: BoxScope) {
+    val density = LocalContext.current.resources.displayMetrics.density
+    val singleHeight = (14 * density + 1).toInt()
+    val scrollIndicate = remember {
+        mutableStateOf(IndexTouchIndicate())
+    }
+    scope.apply {
         val indexArray = arrayOf(
             "*",
             "A",
@@ -76,29 +96,71 @@ fun FriendList(
             "Z",
             "#"
         )
-        Box(
+        Row(
             modifier = Modifier
+                .height(IntrinsicSize.Min)
+                .width(68.dp)
                 .align(Alignment.CenterEnd)
-                .width(20.dp)
-                .pointerInteropFilter {
-                    // TODO
-                    true
-                }
         ) {
-            Column(
+            Box(
                 modifier = Modifier
-                    .wrapContentHeight()
-                    .align(Alignment.Center)
+                    .background(Color.LightGray)
+                    .fillMaxHeight()
+                    .width(48.dp)
             ) {
-                indexArray.forEachIndexed { index, s ->
+                scrollIndicate.value.index?.let {
                     Text(
-                        text = s,
+                        text = it,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 1.dp),
+                            .padding(start = 8.dp, end = 8.dp)
+                            .width(32.dp)
+                            .height(32.dp)
+                            .background(Color.Red)
+                            .offset(y = (scrollIndicate.value.y / density + 6).dp),
                         textAlign = TextAlign.Center,
-                        style = TextStyle(fontSize = 8.sp)
+                        style = MaterialTheme.typography.h6
                     )
+                }
+            }
+            Box(
+                modifier = Modifier
+                    .padding(vertical = 20.dp)
+                    .width(20.dp)
+                    .pointerInteropFilter {
+                        if (it.action == MotionEvent.ACTION_CANCEL || it.action == MotionEvent.ACTION_UP) {
+                            scrollIndicate.value = IndexTouchIndicate()
+                        } else {
+                            var index = (it.y / singleHeight).toInt()
+                            if (index >= indexArray.size) {
+                                index = indexArray.size - 1
+                            }
+                            if (index < 0) {
+                                index = 0
+                            }
+                            scrollIndicate.value = IndexTouchIndicate(it.y, indexArray[index])
+                            Log.d(
+                                "TAGGG",
+                                "touch: ${singleHeight}, ${it.y}, ${indexArray[index]}"
+                            )
+                        }
+                        true
+                    }
+            ) {
+                Column(
+                    modifier = Modifier
+                        .wrapContentHeight()
+                        .align(Alignment.Center)
+                ) {
+                    indexArray.forEachIndexed { index, s ->
+                        Text(
+                            text = s,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(14.dp),
+                            textAlign = TextAlign.Center,
+                            style = TextStyle(fontSize = 8.sp)
+                        )
+                    }
                 }
             }
         }
