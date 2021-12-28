@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
@@ -14,6 +15,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -32,6 +34,7 @@ import com.compose.wechat.entity.Friend
 import com.compose.wechat.entity.FriendIndexGroup
 import com.compose.wechat.entity.IFriendItem
 import com.compose.wechat.ui.theme.WeChatTheme
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -41,7 +44,10 @@ fun FriendList(
     onFriendItemClicked: (Friend) -> Unit
 ) {
     Box(modifier = modifier) {
-        LazyColumn() {
+        val listScrollState = rememberLazyListState()
+        val coroutineScope = rememberCoroutineScope()
+
+        LazyColumn(state = listScrollState) {
             friendList.forEachIndexed { index, iFriendItem ->
                 item(key = index) {
                     if (iFriendItem is Friend) {
@@ -52,7 +58,21 @@ fun FriendList(
                 }
             }
         }
-        FriendsIndexes(scope = this)
+        FriendsIndexes(scope = this) { indexString ->
+            var index = 0
+            if (indexString == "*") {
+                // nothing
+            } else {
+                index = friendList.indexOfFirst {
+                    ((it is FriendIndexGroup) && it.name == indexString)
+                }
+            }
+            if (index >= 0) {
+                coroutineScope.launch {
+                    listScrollState.scrollToItem(index)
+                }
+            }
+        }
     }
 }
 
@@ -60,12 +80,13 @@ internal data class IndexTouchIndicate(val y: Float = 0F, val index: String? = n
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun FriendsIndexes(scope: BoxScope) {
+fun FriendsIndexes(scope: BoxScope, onIndexTouched: (String) -> Unit) {
     val density = LocalContext.current.resources.displayMetrics.density
     val singleHeight = (14 * density + 1).toInt()
     val scrollIndicate = remember {
         mutableStateOf(IndexTouchIndicate())
     }
+    var touchIndex: String? = null
     scope.apply {
         val indexArray = arrayOf(
             "*", "A", "B", "C", "D", "E", "F",
@@ -85,6 +106,9 @@ fun FriendsIndexes(scope: BoxScope) {
                     .width(48.dp)
             ) {
                 scrollIndicate.value.index?.let {
+                    if (touchIndex != it) {
+                        onIndexTouched(it)
+                    }
                     Divider(
                         modifier = Modifier
                             .height((scrollIndicate.value.y / density + 6).dp)
@@ -104,6 +128,7 @@ fun FriendsIndexes(scope: BoxScope) {
                         style = MaterialTheme.typography.h6
                     )
                 }
+                touchIndex = scrollIndicate.value.index
             }
             Box(
                 modifier = Modifier
