@@ -29,11 +29,16 @@ import androidx.navigation.compose.rememberNavController
 import com.compose.wechat.R
 import com.compose.wechat.entity.UiState
 import com.compose.wechat.main.chat.ui.ChatList
+import com.compose.wechat.main.chat.ui.ChatScreen
 import com.compose.wechat.main.chat.vm.ChatViewModel
 import com.compose.wechat.main.friends.ui.FriendList
 import com.compose.wechat.main.friends.vm.FriendsViewModel
 import com.compose.wechat.main.home.ui.HomeMessageList
 import com.compose.wechat.main.home.vm.HomeViewModel
+import com.compose.wechat.main.moments.ui.MomentsList
+import com.compose.wechat.main.moments.vm.MomentsViewModel
+import com.compose.wechat.main.profile.ui.ProfileScreen
+import com.compose.wechat.main.profile.vm.ProfileViewModel
 import com.compose.wechat.ui.theme.WeChatTheme
 import com.compose.wechat.ui.theme.isLaunchScreenShowed
 import com.compose.wechat.utils.touchSwitchState
@@ -101,38 +106,7 @@ fun MainNavGraph() {
             Log.d("Chat", "compose")
             val id = it.arguments?.getInt("id")
             val name = it.arguments?.getString("name")
-
-            val chatViewModel = hiltViewModel<ChatViewModel>()
-            val list = chatViewModel.getMessages().collectAsState(initial = emptyList())
-            Scaffold(topBar = {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(48.dp)
-                        .background(MaterialTheme.colors.primary),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = chatViewModel.getSessionName(),
-                        color = MaterialTheme.colors.onPrimary,
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.h6
-                    )
-                }
-                IconButton(onClick = {
-                    navController.popBackStack()
-                }) {
-                    Icon(Icons.Filled.ArrowBack, null, tint = MaterialTheme.colors.onPrimary)
-                }
-            }) {
-                ChatList(list = list.value, {
-                    chatViewModel.removeMessage(it)
-                }, {
-                    if (it.isEmpty().not()) {
-                        chatViewModel.saveSendMessage(it)
-                    }
-                })
-            }
+            ChatScreen(navController = navController)
         }
     }
 }
@@ -193,16 +167,30 @@ fun MainPage(
                 val friends = friendsViewModel.getFriendsFlow().collectAsState(emptyList())
                 FriendList(
                     friendList = friends.value,
-                    modifier = Modifier.padding(bottom = 56.dp)
+                    modifier = Modifier
+                        .padding(bottom = 56.dp)
+                        .fillMaxWidth()
                 ) {
                     navController.navigate("${Router.CHAT}/${it.id}/${it.name}")
                 }
             } else if (indexState.value == 2) {
                 Log.d("Moments", "compose")
-                Text(text = "22222", modifier = Modifier.padding(10.dp))
+                val momentsViewModel = hiltViewModel<MomentsViewModel>()
+                val configs = momentsViewModel.getMomentConfigs()
+                MomentsList(
+                    modifier = Modifier
+                        .padding(bottom = 56.dp)
+                        .fillMaxSize(),
+                    list = configs
+                ) {
+                }
             } else {
                 Log.d("Profile", "compose")
-                Text(text = "33333", modifier = Modifier.padding(10.dp))
+                val momentsViewModel = hiltViewModel<ProfileViewModel>()
+                val menus = momentsViewModel.getProfileMenuList()
+                val user = momentsViewModel.getUser()
+                ProfileScreen(user, menus) {
+                }
             }
             //
             if (showAddPanelState.value) {

@@ -1,5 +1,6 @@
 package com.compose.wechat.entity
 
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.compose.wechat.utils.toDateString
@@ -51,3 +52,15 @@ data class UiState<T>(
     val loading: Boolean = false,
     val refreshError: Boolean = false
 )
+
+data class JumpConfig(
+    val imageVector: ImageVector?,
+    val name: String,
+    val route: String,
+    val content: List<Any>? = null
+)
+
+data class JumpGroup(val configs: List<JumpConfig>)
+
+data class User(val id: String, val name: String)
+

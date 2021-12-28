@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -18,11 +19,50 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.compose.wechat.R
 import com.compose.wechat.entity.HomeMessage
+import com.compose.wechat.main.chat.vm.ChatViewModel
+
+@Composable
+fun ChatScreen(navController: NavHostController) {
+    val chatViewModel = hiltViewModel<ChatViewModel>()
+    val list = chatViewModel.getMessages().collectAsState(initial = emptyList())
+    Scaffold(topBar = {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp)
+                .background(MaterialTheme.colors.primary),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = chatViewModel.getSessionName(),
+                color = MaterialTheme.colors.onPrimary,
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.h6
+            )
+        }
+        IconButton(onClick = {
+            navController.popBackStack()
+        }) {
+            Icon(Icons.Filled.ArrowBack, null, tint = MaterialTheme.colors.onPrimary)
+        }
+    }) {
+        ChatList(list = list.value, {
+            chatViewModel.removeMessage(it)
+        }, {
+            if (it.isEmpty().not()) {
+                chatViewModel.saveSendMessage(it)
+            }
+        })
+    }
+}
 
 @Composable
 fun ChatList(

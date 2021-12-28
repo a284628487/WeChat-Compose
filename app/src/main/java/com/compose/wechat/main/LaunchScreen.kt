@@ -27,7 +27,7 @@ fun LaunchScreen(navController: NavHostController) {
     Surface(color = MaterialTheme.colors.background) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Text(
-                text = "Welcome!!!",
+                text = "Welcome~",
                 color = MaterialTheme.colors.primary,
                 style = MaterialTheme.typography.h4
             )

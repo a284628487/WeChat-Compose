@@ -82,7 +82,7 @@ internal data class IndexTouchIndicate(val y: Float = 0F, val index: String? = n
 @Composable
 fun FriendsIndexes(scope: BoxScope, onIndexTouched: (String) -> Unit) {
     val density = LocalContext.current.resources.displayMetrics.density
-    val singleHeight = (14 * density + 1).toInt()
+    val singleHeight = 14 * density // (14 * density + 1).toInt()
     val scrollIndicate = remember {
         mutableStateOf(IndexTouchIndicate())
     }
@@ -96,7 +96,8 @@ fun FriendsIndexes(scope: BoxScope, onIndexTouched: (String) -> Unit) {
         )
         Row(
             modifier = Modifier
-                .height(IntrinsicSize.Min)
+                //.height(IntrinsicSize.Min)
+                .padding(top = 72.dp)
                 .width(68.dp)
                 .align(Alignment.CenterEnd)
         ) {
@@ -109,11 +110,9 @@ fun FriendsIndexes(scope: BoxScope, onIndexTouched: (String) -> Unit) {
                     if (touchIndex != it) {
                         onIndexTouched(it)
                     }
-                    Divider(
+                    Spacer(
                         modifier = Modifier
                             .height((scrollIndicate.value.y / density + 6).dp)
-                            .width(0.dp)
-                            .background(Color.Transparent)
                     )
                     Text(
                         text = it,
@@ -142,7 +141,7 @@ fun FriendsIndexes(scope: BoxScope, onIndexTouched: (String) -> Unit) {
                             var y = it.y
                             if (index >= indexArray.size) {
                                 index = indexArray.size - 1
-                                y = (index + 1) * singleHeight.toFloat()
+                                y = (index + 1) * singleHeight
                             }
                             if (index < 0) {
                                 index = 0
@@ -183,7 +182,7 @@ fun FriendItem(friend: Friend, onClick: (Friend) -> Unit) {
                 .clickable(enabled = true, onClick = {
                     onClick(friend)
                 })
-                .padding(horizontal = 16.dp, vertical = 8.dp),
+                .padding(horizontal = 10.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
@@ -222,7 +221,7 @@ fun FriendIndexGroupItem(group: FriendIndexGroup) {
     ) {
         Text(
             text = group.name,
-            modifier = Modifier.padding(start = 16.dp),
+            modifier = Modifier.padding(start = 10.dp),
             style = MaterialTheme.typography.caption
         )
     }
