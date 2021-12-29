@@ -62,7 +62,7 @@ fun AnimatedString(callback: () -> Unit) {
 fun SingleAnimString(str: String, index: Int, callback: (() -> Unit)? = null) {
     var scaled by remember { mutableStateOf(false) }
     LaunchedEffect(key1 = str, block = {
-        delay(100L * index)
+        delay(75L * index)
         scaled = true
     })
     val textSize by animateDpAsState(

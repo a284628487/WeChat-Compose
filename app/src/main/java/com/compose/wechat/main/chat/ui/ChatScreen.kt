@@ -28,6 +28,7 @@ import androidx.navigation.NavHostController
 import com.compose.wechat.R
 import com.compose.wechat.entity.HomeMessage
 import com.compose.wechat.main.chat.vm.ChatViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun ChatScreen(navController: NavHostController) {
@@ -54,11 +55,17 @@ fun ChatScreen(navController: NavHostController) {
             Icon(Icons.Filled.ArrowBack, null, tint = MaterialTheme.colors.onPrimary)
         }
     }) {
+        Log.d("ChatScreen", "compose")
         ChatList(list = list.value, {
             chatViewModel.removeMessage(it)
         }, {
             if (it.isEmpty().not()) {
                 chatViewModel.saveSendMessage(it)
+            }
+        }, {
+            Log.d("ChatScreen", "check empty")
+            if (list.value.isEmpty()) {
+                chatViewModel.saveReceivedMessage("How are you?")
             }
         })
     }
@@ -68,8 +75,14 @@ fun ChatScreen(navController: NavHostController) {
 fun ChatList(
     list: List<HomeMessage>,
     onLongPress: (HomeMessage) -> Unit,
-    onSendClick: (String) -> Unit
+    onSendClick: (String) -> Unit,
+    checkEmpty: () -> Unit = {}
 ) {
+    val innerCheckEmpty by rememberUpdatedState(checkEmpty)
+    LaunchedEffect(key1 = Unit, block = {
+        delay(1200)
+        innerCheckEmpty()
+    })
     Column {
         Box(
             modifier = Modifier
