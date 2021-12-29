@@ -22,6 +22,18 @@ import com.compose.wechat.entity.JumpConfig
 import com.compose.wechat.entity.JumpGroup
 import com.compose.wechat.ui.theme.WeChatTheme
 
+
+@Composable
+fun MomentsScreen(configs: List<JumpGroup>) {
+    MomentsList(
+        modifier = Modifier
+            .padding(bottom = 56.dp)
+            .fillMaxSize(),
+        list = configs
+    ) {
+    }
+}
+
 @Composable
 fun MomentsList(
     modifier: Modifier = Modifier,

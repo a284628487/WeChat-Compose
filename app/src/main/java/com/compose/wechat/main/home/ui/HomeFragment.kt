@@ -43,7 +43,7 @@ class HomeFragment : Fragment() {
                 WeChatTheme {
                     val uiState =
                         viewModel.getMessagesFlow().collectAsState(UiState(loading = true))
-                    HomeMessageList(
+                    HomeScreen(
                         uiState = uiState.value
                     ) {
                         findNavController().navigate(R.id.main_chat, Bundle().apply {

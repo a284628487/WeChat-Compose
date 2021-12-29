@@ -24,7 +24,7 @@ import com.compose.wechat.entity.UiState
 import com.compose.wechat.ui.theme.WeChatTheme
 
 @Composable
-fun HomeMessageList(uiState: UiState<List<HomeMessage>>, onMessageClick: (HomeMessage) -> Unit) {
+fun HomeScreen(uiState: UiState<List<HomeMessage>>, onMessageClick: (HomeMessage) -> Unit) {
     if (uiState.loading) {
         // nothing
     } else {

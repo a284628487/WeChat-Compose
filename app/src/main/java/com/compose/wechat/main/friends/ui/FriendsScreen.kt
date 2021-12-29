@@ -12,10 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -29,10 +26,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.compose.wechat.R
 import com.compose.wechat.entity.Friend
 import com.compose.wechat.entity.FriendIndexGroup
 import com.compose.wechat.entity.IFriendItem
+import com.compose.wechat.main.Router
+import com.compose.wechat.ui.common.FunctionalityNotAvailableDialog
 import com.compose.wechat.ui.theme.WeChatTheme
 import kotlinx.coroutines.launch
 
@@ -43,6 +43,32 @@ object FriendsScreenRouter {
     const val LABEL_LIST = "labelList"
     const val OFFICIAL_ACCOUNT = "officialAccount"
     const val COMPANY_WECHAT = "companyWechat"
+}
+
+@Composable
+fun FriendsScreen(navController: NavHostController, friends: State<List<IFriendItem>>) {
+    val showDialog = remember {
+        mutableStateOf(false)
+    }
+    FriendList(
+        friendList = friends.value,
+        modifier = Modifier
+            .padding(bottom = 56.dp)
+            .fillMaxWidth(),
+        content = {
+            if (showDialog.value) {
+                FunctionalityNotAvailableDialog {
+                    showDialog.value = false
+                }
+            }
+        }
+    ) {
+        it.route?.let {
+            showDialog.value = true
+        } ?: kotlin.run {
+            navController.navigate("${Router.CHAT}/${it.id}/${it.name}")
+        }
+    }
 }
 
 @OptIn(ExperimentalComposeUiApi::class)

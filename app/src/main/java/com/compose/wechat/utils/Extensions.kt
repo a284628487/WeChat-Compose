@@ -2,9 +2,13 @@ package com.compose.wechat.utils
 
 import android.util.Log
 import android.view.MotionEvent
+import androidx.compose.foundation.gestures.PressGestureScope
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.pointerInteropFilter
 import java.text.SimpleDateFormat
 import java.util.*
@@ -51,4 +55,9 @@ fun Modifier.touchSwitchState(mutableState: MutableState<Boolean>): Modifier =
             }
         }
         false
+    }
+
+fun Modifier.onPress(onPress: suspend PressGestureScope.(Offset) -> Unit): Modifier =
+    this.pointerInput(Unit) {
+        detectTapGestures(onPress = onPress)
     }
