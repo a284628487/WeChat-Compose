@@ -36,6 +36,15 @@ import com.compose.wechat.entity.IFriendItem
 import com.compose.wechat.ui.theme.WeChatTheme
 import kotlinx.coroutines.launch
 
+object FriendsScreenRouter {
+    const val NEW_FRIENDS = "newFriends"
+    const val LIMITED_FRIENDS = "limitedFriends"
+    const val GROUP_CHAT_LIST = "groupChatList"
+    const val LABEL_LIST = "labelList"
+    const val OFFICIAL_ACCOUNT = "officialAccount"
+    const val COMPANY_WECHAT = "companyWechat"
+}
+
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun FriendList(
