@@ -14,7 +14,7 @@ import com.compose.wechat.main.home.data.HomeMessageDao
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Database(entities = [HomeMessage::class, Friend::class], version = 2, exportSchema = false)
+@Database(entities = [HomeMessage::class, Friend::class], version = 3, exportSchema = false)
 abstract class WeChatDatabase : RoomDatabase() {
 
     companion object {
@@ -44,6 +44,15 @@ abstract class WeChatDatabase : RoomDatabase() {
                     }).addMigrations(object : Migration(1, 2) {
                         override fun migrate(database: SupportSQLiteDatabase) {
                             database.execSQL("ALTER TABLE Friend ADD route TEXT DEFAULT NULL")
+                        }
+                    }).addMigrations(object : Migration(2, 3) {
+                        override fun migrate(database: SupportSQLiteDatabase) {
+                            database.execSQL("UPDATE Friend set route = \"newFriends\" where id = 10000")
+                            database.execSQL("UPDATE Friend set route = \"limitedFriends\" where id = 10001")
+                            database.execSQL("UPDATE Friend set route = \"groupChatList\" where id = 10002")
+                            database.execSQL("UPDATE Friend set route = \"labelList\" where id = 10003")
+                            database.execSQL("UPDATE Friend set route = \"officialAccount\" where id = 10004")
+                            database.execSQL("UPDATE Friend set route = \"companyWechat\" where id = 10005")
                         }
                     }).build()
                 }

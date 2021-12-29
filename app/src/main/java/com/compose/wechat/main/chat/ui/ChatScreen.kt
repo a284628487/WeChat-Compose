@@ -75,7 +75,6 @@ fun ChatList(
             modifier = Modifier
                 .weight(1f)
                 .background(Color(0xFFEBEBEB))
-                .padding(top = 8.dp)
         ) {
             LazyColumn() {
                 list.forEachIndexed { index, message ->
@@ -98,7 +97,7 @@ fun ChatMessageReceived(message: HomeMessage, onLongPress: (HomeMessage) -> Unit
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 8.dp, top = 4.dp, bottom = 4.dp, end = 56.dp)
+            .padding(start = 8.dp, top = 8.dp, bottom = 8.dp, end = 56.dp)
     ) {
         Image(
             painter = painterResource(id = R.drawable.ic_frag),
@@ -130,7 +129,7 @@ fun ChatMessageSend(message: HomeMessage, onLongPress: (HomeMessage) -> Unit) {
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 56.dp, top = 4.dp, bottom = 4.dp, end = 8.dp)
+            .padding(start = 56.dp, top = 8.dp, bottom = 8.dp, end = 8.dp)
     ) {
         val (messageText, spacer, icon) = createRefs()
         Image(

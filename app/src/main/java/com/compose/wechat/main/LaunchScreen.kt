@@ -6,6 +6,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -75,6 +76,7 @@ fun SingleAnimString(str: String, index: Int, callback: (() -> Unit)? = null) {
     }
     Text(
         text = str,
+        modifier = Modifier.sizeIn(minWidth = 18.dp),
         color = MaterialTheme.colors.primary,
         style = TextStyle(
             Color.Red, fontSize = textSize.value.sp

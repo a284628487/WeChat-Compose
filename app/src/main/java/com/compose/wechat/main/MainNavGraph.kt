@@ -39,6 +39,8 @@ import com.compose.wechat.main.moments.ui.MomentsList
 import com.compose.wechat.main.moments.vm.MomentsViewModel
 import com.compose.wechat.main.profile.ui.ProfileScreen
 import com.compose.wechat.main.profile.vm.ProfileViewModel
+import com.compose.wechat.ui.common.BackPressHandler
+import com.compose.wechat.ui.common.FunctionalityNotAvailableDialog
 import com.compose.wechat.ui.theme.WeChatTheme
 import com.compose.wechat.ui.theme.isLaunchScreenShowed
 import com.compose.wechat.utils.touchSwitchState
@@ -165,13 +167,27 @@ fun MainPage(
                 Log.d("Friends", "compose")
                 val friendsViewModel = hiltViewModel<FriendsViewModel>()
                 val friends = friendsViewModel.getFriendsFlow().collectAsState(emptyList())
+                val showDialog = remember {
+                    mutableStateOf(false)
+                }
                 FriendList(
                     friendList = friends.value,
                     modifier = Modifier
                         .padding(bottom = 56.dp)
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
+                    content = {
+                        if (showDialog.value) {
+                            FunctionalityNotAvailableDialog {
+                                showDialog.value = false
+                            }
+                        }
+                    }
                 ) {
-                    navController.navigate("${Router.CHAT}/${it.id}/${it.name}")
+                    it.route?.let {
+                        showDialog.value = true
+                    } ?: kotlin.run {
+                        navController.navigate("${Router.CHAT}/${it.id}/${it.name}")
+                    }
                 }
             } else if (indexState.value == 2) {
                 Log.d("Moments", "compose")
@@ -194,7 +210,12 @@ fun MainPage(
             }
             //
             if (showAddPanelState.value) {
+                // show add panel at right-top
                 AddPanel(showAddPanelState)
+                // press back key will dismiss the add panel
+                BackPressHandler {
+                    showAddPanelState.value = false
+                }
             }
         }
     }

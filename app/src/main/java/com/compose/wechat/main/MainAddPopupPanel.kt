@@ -23,42 +23,42 @@ import androidx.compose.ui.window.Popup
 
 @Composable
 fun AddPanel(showState: MutableState<Boolean>) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Divider(
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Spacer(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(1.dp)
+                .height(6.dp)
         )
-        Box {
-            val popupWidth = 150.dp
-            val cornerSize = 8.dp
-            Popup(
-                alignment = Alignment.TopStart,
-                offset = IntOffset(x = 126, y = 18)
+        val popupWidth = 150.dp
+        val cornerSize = 8.dp
+        Popup(
+            alignment = Alignment.TopEnd,
+            offset = IntOffset(x = -16, y = 18)
+        ) {
+            Box(
+                Modifier
+                    .width(popupWidth)
+                    .wrapContentHeight()
+                    .background(
+                        Color.DarkGray,
+                        RoundedCornerShape(cornerSize)
+                    )
             ) {
-                Box(
-                    Modifier
-                        .width(popupWidth)
-                        .wrapContentHeight()
-                        .background(
-                            Color.DarkGray,
-                            RoundedCornerShape(cornerSize)
-                        )
-                ) {
-                    Column {
-                        val context = LocalContext.current
-                        val clickCallback = { s: String ->
-                            Toast.makeText(context, s, Toast.LENGTH_SHORT).show()
-                            showState.value = false
-                        }
-                        AddMenuItem(Icons.Filled.Message, "发起群聊", clickCallback)
-                        AddMenuItemDivider()
-                        AddMenuItem(Icons.Filled.AddComment, "添加朋友", clickCallback)
-                        AddMenuItemDivider()
-                        AddMenuItem(Icons.Filled.Scanner, "扫一扫", clickCallback)
-                        AddMenuItemDivider()
-                        AddMenuItem(Icons.Filled.Payment, "收付款", clickCallback)
+                Column {
+                    val context = LocalContext.current
+                    val clickCallback = { s: String ->
+                        Toast.makeText(context, s, Toast.LENGTH_SHORT).show()
+                        showState.value = false
                     }
+                    AddMenuItem(Icons.Filled.Message, "发起群聊", clickCallback)
+                    AddMenuItemDivider()
+                    AddMenuItem(Icons.Filled.AddComment, "添加朋友", clickCallback)
+                    AddMenuItemDivider()
+                    AddMenuItem(Icons.Filled.Scanner, "扫一扫", clickCallback)
+                    AddMenuItemDivider()
+                    AddMenuItem(Icons.Filled.Payment, "收付款", clickCallback)
                 }
             }
         }

@@ -41,6 +41,7 @@ import kotlinx.coroutines.launch
 fun FriendList(
     friendList: List<IFriendItem>,
     modifier: Modifier = Modifier,
+    content: @Composable BoxScope.() -> Unit = {},
     onFriendItemClicked: (Friend) -> Unit
 ) {
     Box(modifier = modifier) {
@@ -73,6 +74,7 @@ fun FriendList(
                 }
             }
         }
+        this.content()
     }
 }
 
