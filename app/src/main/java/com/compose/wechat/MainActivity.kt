@@ -26,11 +26,5 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-//        val binding = ActivityMainBinding.inflate(layoutInflater)
-//        setContentView(binding.root)
-//
-//        val navController = findNavController(R.id.nav_main_fragment)
-//        binding.navigationView.labelVisibilityMode = LABEL_VISIBILITY_LABELED
-//        binding.navigationView.setupWithNavController(navController)
     }
 }
