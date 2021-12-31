@@ -8,6 +8,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -26,6 +27,7 @@ import com.compose.wechat.main.moments.vm.MomentsViewModel
 import com.compose.wechat.main.profile.ui.ProfileScreen
 import com.compose.wechat.main.profile.vm.ProfileViewModel
 import com.compose.wechat.ui.common.BackPressHandler
+import com.compose.wechat.ui.theme.TitleBarBackground
 import com.compose.wechat.utils.onPress
 import com.compose.wechat.utils.touchSwitchState
 
@@ -34,6 +36,7 @@ import com.compose.wechat.utils.touchSwitchState
 fun NavWithBottomNavigation(
     parentNavController: NavHostController,
     navList: List<NavItem>,
+    statusBarColor: MutableState<Color>,
     onMainSearchClick: () -> Unit = {}
 ) {
     val showAddPanelState = remember {
@@ -51,22 +54,35 @@ fun NavWithBottomNavigation(
                 it.route == desRoute
             }?.name ?: return@Scaffold
             if (desRoute != Router.PROFILE) {
-                TopAppBar(title = {
-                    Text(text = desName)
-                }, modifier = Modifier.touchSwitchState(showAddPanelState), actions = {
-                    IconButton(onClick = onMainSearchClick) {
-                        Icon(Icons.Filled.Search, null, tint = MaterialTheme.colors.onPrimary)
-                    }
-                    IconButton(onClick = {
-                        showAddPanelState.value = true
-                    }) {
-                        Icon(Icons.Filled.Add, null, tint = MaterialTheme.colors.onPrimary)
-                    }
-                })
+                statusBarColor.value = TitleBarBackground
+                TopAppBar(
+                    title = {
+                        Text(text = desName)
+                    },
+                    modifier = Modifier.touchSwitchState(showAddPanelState), actions = {
+                        IconButton(onClick = onMainSearchClick) {
+                            Icon(Icons.Filled.Search, null, tint = MaterialTheme.colors.primary)
+                        }
+                        IconButton(onClick = {
+                            showAddPanelState.value = true
+                        }) {
+                            Icon(Icons.Filled.Add, null, tint = MaterialTheme.colors.primary)
+                        }
+                    },
+                    backgroundColor = TitleBarBackground,
+                    contentColor = MaterialTheme.colors.primary,
+                    elevation = 16.dp
+                )
+            } else {
+                statusBarColor.value = Color.White
             }
         },
         bottomBar = {
-            BottomNavigation(modifier = Modifier.touchSwitchState(showAddPanelState)) {
+            BottomNavigation(
+                modifier = Modifier.touchSwitchState(showAddPanelState),
+                backgroundColor = TitleBarBackground,
+                contentColor = MaterialTheme.colors.primary
+            ) {
                 val currentDestination = state.value?.destination
                 navList.forEach {
                     BottomNavigationItem(

@@ -28,6 +28,7 @@ import androidx.navigation.NavHostController
 import com.compose.wechat.R
 import com.compose.wechat.entity.HomeMessage
 import com.compose.wechat.main.chat.vm.ChatViewModel
+import com.compose.wechat.ui.theme.TitleBarBackground
 import kotlinx.coroutines.delay
 
 @Composable
@@ -38,13 +39,13 @@ fun ChatScreen(navController: NavHostController) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(48.dp)
-                .background(MaterialTheme.colors.primary),
+                .height(56.dp)
+                .background(TitleBarBackground),
             contentAlignment = Alignment.Center
         ) {
             Text(
                 text = chatViewModel.getSessionName(),
-                color = MaterialTheme.colors.onPrimary,
+                color = MaterialTheme.colors.primary,
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.h6
             )
@@ -52,7 +53,7 @@ fun ChatScreen(navController: NavHostController) {
         IconButton(onClick = {
             navController.popBackStack()
         }) {
-            Icon(Icons.Filled.ArrowBack, null, tint = MaterialTheme.colors.onPrimary)
+            Icon(Icons.Filled.ArrowBack, null, tint = MaterialTheme.colors.primary)
         }
     }) {
         Log.d("ChatScreen", "compose")
@@ -87,7 +88,7 @@ fun ChatList(
         Box(
             modifier = Modifier
                 .weight(1f)
-                .background(Color(0xFFEBEBEB))
+                .background(MaterialTheme.colors.background)
         ) {
             LazyColumn() {
                 list.forEachIndexed { index, message ->
@@ -207,7 +208,7 @@ fun SendMessageInput(modifier: Modifier, onSendClick: (String) -> Unit) {
     var text by remember { mutableStateOf("") }
     Box(
         modifier = modifier
-            .background(Color(0xFFD3D3D3))
+            .background(Color(0xFFF0F0F0))
             .padding(horizontal = 10.dp, vertical = 6.dp)
             .wrapContentHeight(),
         contentAlignment = Alignment.Center

@@ -8,27 +8,29 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.graphics.Color
 import com.compose.wechat.R
 
-private val DarkColorPalette = darkColors(
-    primary = Purple200,
-    primaryVariant = Purple700,
-    secondary = Teal200
+private val LightThemeColors = lightColors(
+    primary = Red700,
+    primaryVariant = Red900,
+    onPrimary = Color.White,
+    secondary = Red700,
+    secondaryVariant = Red900,
+    background = Background,
+    onSecondary = Color.White,
+    error = Red800,
+    onBackground = Color.Black,
 )
 
-private val LightColorPalette = lightColors(
-    primary = Purple500,
-    primaryVariant = Purple700,
-    secondary = Teal200
-
-    /* Other default colors to override
-    background = Color.White,
-    surface = Color.White,
-    onPrimary = Color.White,
+private val DarkThemeColors = darkColors(
+    primary = Red300,
+    primaryVariant = Red700,
+    onPrimary = Color.Black,
+    secondary = Red300,
     onSecondary = Color.Black,
-    onBackground = Color.Black,
-    onSurface = Color.Black,
-    */
+    error = Red200,
+    onBackground = Color.White
 )
 
 open class AbsThemeMode(var backgroundResId: Int, var logoResId: Int)
@@ -53,9 +55,9 @@ fun WeChatTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable
         LocalThemeMode provides welcomeAssets,
     ) {
         val colors = if (darkTheme) {
-            DarkColorPalette
+            DarkThemeColors
         } else {
-            LightColorPalette
+            LightThemeColors
         }
 
         MaterialTheme(

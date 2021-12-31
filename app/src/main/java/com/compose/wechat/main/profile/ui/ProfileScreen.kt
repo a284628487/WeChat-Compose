@@ -36,7 +36,7 @@ fun ProfileScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFEDEDED))
+            .background(MaterialTheme.colors.background)
     ) {
         ProfileHeader(user = user, {}, {}, {})
         ProfileMenusList(list = list, onMenuClicked = onMenuClicked)

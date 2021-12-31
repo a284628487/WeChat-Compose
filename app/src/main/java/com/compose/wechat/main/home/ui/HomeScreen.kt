@@ -47,7 +47,7 @@ fun HomeMessageItem(message: HomeMessage, onMessageClick: (HomeMessage) -> Unit)
     val backgroundColor = if (message.isTopped) {
         Color(0xFFEBEBEB)
     } else {
-        Color.Transparent
+        Color.White
     }
     Row(
         modifier = Modifier

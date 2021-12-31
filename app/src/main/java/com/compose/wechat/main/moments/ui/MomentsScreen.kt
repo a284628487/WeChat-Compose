@@ -40,7 +40,7 @@ fun MomentsList(
     dividerFirst: Boolean = false,
     onMenuClicked: (JumpConfig) -> Unit = {}
 ) {
-    LazyColumn(modifier = modifier.background(Color(0xFFEDEDED))) {
+    LazyColumn(modifier = modifier.background(MaterialTheme.colors.background)) {
         list.forEachIndexed { index, jumpGroup ->
             if (index != 0) {
                 item {

@@ -1,9 +1,9 @@
 package com.compose.wechat.main
 
 import android.util.Log
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.*
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -13,6 +13,7 @@ import androidx.navigation.compose.rememberNavController
 import com.compose.wechat.R
 import com.compose.wechat.main.chat.ui.ChatScreen
 import com.compose.wechat.ui.theme.isLaunchScreenShowed
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 object Router {
     const val LAUNCH = "launch"
@@ -25,13 +26,9 @@ object Router {
 }
 
 @Composable
-fun MainNavGraph() {
+fun MainNavGraph(statusBarColor: MutableState<Color>) {
     Log.d("MainNavGraph", "compose")
     val navController = rememberNavController()
-
-    val indexState = remember {
-        mutableStateOf(0)
-    }
 
     NavHost(navController = navController, startDestination = Router.MAIN) {
         Log.d("NavHost", "compose")
@@ -60,7 +57,11 @@ fun MainNavGraph() {
                         R.drawable.ic_main_profile
                     )
                 )
-                NavWithBottomNavigation(navController, navList = navList)
+                NavWithBottomNavigation(
+                    navController,
+                    navList = navList,
+                    statusBarColor = statusBarColor
+                )
             } else {
                 navController.navigate(Router.LAUNCH)
             }
