@@ -26,7 +26,7 @@ import com.compose.wechat.ui.theme.WeChatTheme
 @Composable
 fun HomeScreen(uiState: UiState<List<HomeMessage>>, onMessageClick: (HomeMessage) -> Unit) {
     if (uiState.loading) {
-        // nothing
+        // TODO loading
     } else {
         if (uiState.data.isNullOrEmpty()) {
             EmptyView()

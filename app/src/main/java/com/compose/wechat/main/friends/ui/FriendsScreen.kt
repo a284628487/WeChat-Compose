@@ -53,7 +53,6 @@ fun FriendsScreen(navController: NavHostController, friends: State<List<IFriendI
     FriendList(
         friendList = friends.value,
         modifier = Modifier
-            .padding(bottom = 56.dp)
             .fillMaxWidth(),
         content = {
             if (showDialog.value) {

@@ -27,7 +27,6 @@ import com.compose.wechat.ui.theme.WeChatTheme
 fun MomentsScreen(configs: List<JumpGroup>) {
     MomentsList(
         modifier = Modifier
-            .padding(bottom = 56.dp)
             .fillMaxSize(),
         list = configs
     ) {

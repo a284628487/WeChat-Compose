@@ -60,7 +60,7 @@ fun MainNavGraph() {
                         R.drawable.ic_main_profile
                     )
                 )
-                MainScreen(navController, navList, indexState)
+                NavWithBottomNavigation(navController, navList = navList)
             } else {
                 navController.navigate(Router.LAUNCH)
             }
