@@ -1,5 +1,6 @@
 package com.compose.wechat.main
 
+import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
@@ -125,6 +126,7 @@ fun NavWithBottomNavigation(
                 .touchSwitchState(showAddPanelState)
         ) {
             composable(Router.MESSAGE) {
+                Log.d("Message", "compose")
                 val homeViewModel = hiltViewModel<HomeViewModel>()
                 val uiState =
                     homeViewModel.getMessagesFlow().collectAsState(UiState(loading = true))
@@ -135,16 +137,19 @@ fun NavWithBottomNavigation(
                 }
             }
             composable(Router.FRIENDS) {
+                Log.d("Friends", "compose")
                 val friendsViewModel = hiltViewModel<FriendsViewModel>()
                 val friends = friendsViewModel.getFriendsFlow().collectAsState(emptyList())
                 FriendsScreen(parentNavController, friends)
             }
             composable(Router.MOMENTS) {
+                Log.d("Moments", "compose")
                 val momentsViewModel = hiltViewModel<MomentsViewModel>()
                 val configs = momentsViewModel.getMomentConfigs()
                 MomentsScreen(configs)
             }
             composable(Router.PROFILE) {
+                Log.d("Profile", "compose")
                 val momentsViewModel = hiltViewModel<ProfileViewModel>()
                 val menus = momentsViewModel.getProfileMenuList()
                 val user = momentsViewModel.getUser()
