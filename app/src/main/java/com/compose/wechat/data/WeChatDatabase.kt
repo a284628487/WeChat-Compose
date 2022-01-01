@@ -9,9 +9,9 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.compose.wechat.entity.Friend
 import com.compose.wechat.entity.HomeMessage
-import com.compose.wechat.main.friends.data.FriendsDao
-import com.compose.wechat.main.friends.ui.FriendsScreenRouter
-import com.compose.wechat.main.home.data.HomeMessageDao
+import com.compose.wechat.ui.main.friends.data.FriendsDao
+import com.compose.wechat.ui.main.friends.FriendsScreenRouter
+import com.compose.wechat.ui.main.home.data.HomeMessageDao
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 

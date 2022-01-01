@@ -6,12 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.graphics.Color
-import androidx.core.view.WindowCompat
-import com.compose.wechat.main.MainNavGraph
+import com.compose.wechat.ui.main.MainNavGraph
 import com.compose.wechat.ui.common.LocalBackPressedDispatcher
 import com.compose.wechat.ui.theme.TitleBarBackground
 import com.compose.wechat.ui.theme.WeChatTheme

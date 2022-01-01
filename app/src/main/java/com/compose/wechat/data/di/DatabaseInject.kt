@@ -1,8 +1,8 @@
 package com.compose.wechat.data.di
 
 import android.content.Context
-import com.compose.wechat.main.friends.data.FriendsDao
-import com.compose.wechat.main.home.data.HomeMessageDao
+import com.compose.wechat.ui.main.friends.data.FriendsDao
+import com.compose.wechat.ui.main.home.data.HomeMessageDao
 import com.compose.wechat.data.WeChatDatabase
 import dagger.Module
 import dagger.Provides
