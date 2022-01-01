@@ -29,6 +29,7 @@ import com.compose.wechat.R
 import com.compose.wechat.entity.HomeMessage
 import com.compose.wechat.main.chat.vm.ChatViewModel
 import com.compose.wechat.ui.theme.TitleBarBackground
+import com.google.accompanist.insets.navigationBarsWithImePadding
 import kotlinx.coroutines.delay
 
 @Composable
@@ -90,7 +91,7 @@ fun ChatList(
                 .weight(1f)
                 .background(MaterialTheme.colors.background)
         ) {
-            LazyColumn() {
+            LazyColumn(reverseLayout = true) {
                 list.forEachIndexed { index, message ->
                     item(key = index) {
                         if (message.senderId == message.sessionId) {
@@ -102,7 +103,11 @@ fun ChatList(
                 }
             }
         }
-        SendMessageInput(modifier = Modifier.fillMaxWidth(), onSendClick = onSendClick)
+        SendMessageInput(
+            modifier = Modifier
+                .fillMaxWidth(),
+            onSendClick = onSendClick
+        )
     }
 }
 
