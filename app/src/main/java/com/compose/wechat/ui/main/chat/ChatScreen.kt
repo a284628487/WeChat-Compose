@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import coil.compose.rememberImagePainter
 import com.compose.wechat.R
 import com.compose.wechat.entity.HomeMessage
 import com.compose.wechat.ui.theme.TitleBarBackground
@@ -117,7 +118,7 @@ fun ChatMessageReceived(message: HomeMessage, onLongPress: (HomeMessage) -> Unit
             .padding(start = 8.dp, top = 8.dp, bottom = 8.dp, end = 56.dp)
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_frag),
+            painter = rememberImagePainter(data = message.senderIcon),
             contentDescription = "",
             modifier = Modifier
                 .size(36.dp, 36.dp)
@@ -150,7 +151,7 @@ fun ChatMessageSend(message: HomeMessage, onLongPress: (HomeMessage) -> Unit) {
     ) {
         val (messageText, spacer, icon) = createRefs()
         Image(
-            painter = painterResource(id = R.drawable.ic_frag),
+            painter = rememberImagePainter(data = message.senderIcon),
             contentDescription = "",
             modifier = Modifier
                 .size(36.dp, 36.dp)
@@ -195,12 +196,13 @@ fun ChatMessageReceivedPreview() {
             0,
             "",
             "Hello",
+            0,
             "Hello ni hao",
+            "",
             0,
             "FriendA",
             0,
             "Me",
-            0,
             System.currentTimeMillis()
         )
     ) {}
@@ -259,12 +261,13 @@ fun ChatMessageSendPreview() {
             0,
             "",
             "Hello",
+            0,
             "Hello ni hao",
+            "",
             0,
             "FriendA",
             0,
             "Me",
-            0,
             System.currentTimeMillis()
         )
     ) {}
@@ -285,13 +288,14 @@ fun ChatListPreview() {
                 0,
                 "",
                 "Hello",
+                0,
                 "Hello ni hao",
+                "",
                 0,
                 "FriendA",
                 0,
                 "Me",
-                0,
-                System.currentTimeMillis()
+                System.currentTimeMillis(),
             )
         ), {}, {}
     )

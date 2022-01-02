@@ -62,21 +62,21 @@ abstract class WeChatDatabase : RoomDatabase() {
         }
 
         private fun initialFriendsList() = mutableListOf(
-            Friend(startIndex + 0, "", "新的朋友", '0', FriendsScreenRouter.NEW_FRIENDS),
-            Friend(startIndex + 1, "", "仅聊天的朋友", '0', FriendsScreenRouter.LIMITED_FRIENDS),
-            Friend(startIndex + 2, "", "群聊", '0', FriendsScreenRouter.GROUP_CHAT_LIST),
-            Friend(startIndex + 3, "", "标签", '0', FriendsScreenRouter.LABEL_LIST),
-            Friend(startIndex + 4, "", "公众号", '0', FriendsScreenRouter.OFFICIAL_ACCOUNT),
-            Friend(startIndex + 5, "", "企业微信联系人", '1', FriendsScreenRouter.COMPANY_WECHAT),
-            Friend(startIndex + 6, "", "Android", '2'),
-            Friend(startIndex + 7, "", "iOS", '2'),
-            Friend(startIndex + 8, "", "Android", 'A'),
-            Friend(startIndex + 9, "", "Flutter", 'F'),
-            Friend(startIndex + 10, "", "Java", 'J'),
-            Friend(startIndex + 11, "", "Kotlin", 'K'),
-            Friend(startIndex + 12, "", "React", 'R'),
-            Friend(startIndex + 13, "", "ReactNative", 'R'),
-            Friend(startIndex + 14, "", "Vue", 'V')
+            Friend(startIndex + 0, FakeHeads.HeadIcons[2], "新的朋友", '0', FriendsScreenRouter.NEW_FRIENDS),
+            Friend(startIndex + 1, FakeHeads.HeadIcons[3], "仅聊天的朋友", '0', FriendsScreenRouter.LIMITED_FRIENDS),
+            Friend(startIndex + 2, FakeHeads.HeadIcons[4], "群聊", '0', FriendsScreenRouter.GROUP_CHAT_LIST),
+            Friend(startIndex + 3, FakeHeads.HeadIcons[5], "标签", '0', FriendsScreenRouter.LABEL_LIST),
+            Friend(startIndex + 4, FakeHeads.HeadIcons[6], "公众号", '0', FriendsScreenRouter.OFFICIAL_ACCOUNT),
+            Friend(startIndex + 5, FakeHeads.HeadIcons[7], "企业微信联系人", '1', FriendsScreenRouter.COMPANY_WECHAT),
+            Friend(startIndex + 6, FakeHeads.HeadIcons[0], "Girl0", '2'),
+            Friend(startIndex + 7, FakeHeads.HeadIcons[1], "Girl1", '2'),
+            Friend(startIndex + 8, FakeHeads.HeadIcons[8], "Android", 'A'),
+            Friend(startIndex + 9, FakeHeads.HeadIcons[9], "Flutter", 'F'),
+            Friend(startIndex + 10, FakeHeads.HeadIcons[10], "Java", 'J'),
+            Friend(startIndex + 11, FakeHeads.HeadIcons[11], "Kotlin", 'K'),
+            Friend(startIndex + 12, FakeHeads.HeadIcons[12], "React", 'R'),
+            Friend(startIndex + 13, FakeHeads.HeadIcons[13], "ReactNative", 'R'),
+            Friend(startIndex + 14, FakeHeads.HeadIcons[14], "Vue", 'V')
         )
     }
 

@@ -9,6 +9,9 @@ interface IChatRepo {
     fun query(friendId: Int): Flow<List<HomeMessage>>
 
     @WorkerThread
+    suspend fun getSessionUserIcon(friendId: Int): String
+
+    @WorkerThread
     suspend fun delete(message: HomeMessage): Boolean
 
     @WorkerThread

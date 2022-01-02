@@ -26,7 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.compose.wechat.R
+import coil.compose.rememberImagePainter
 import com.compose.wechat.entity.Friend
 import com.compose.wechat.entity.FriendIndexGroup
 import com.compose.wechat.entity.IFriendItem
@@ -221,7 +221,7 @@ fun FriendItem(friend: Friend, onClick: (Friend) -> Unit) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(id = R.drawable.ic_frag),
+                painter = rememberImagePainter(data = friend.iconUrl),
                 contentDescription = "",
                 modifier = Modifier
                     .size(width = 36.dp, height = 36.dp)

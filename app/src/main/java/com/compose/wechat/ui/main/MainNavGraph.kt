@@ -70,8 +70,10 @@ fun MainNavGraph(statusBarColor: MutableState<Color>) {
         }
         composable(
             "${Router.CHAT}/{id}/{name}",
-            arguments = listOf(navArgument("id") { type = NavType.IntType },
-                navArgument("name") { type = NavType.StringType })
+            arguments = listOf(
+                navArgument("id") { type = NavType.IntType },
+                navArgument("name") { type = NavType.StringType }
+            )
         ) {
             Log.d("Chat", "compose")
             val id = it.arguments?.getInt("id")
