@@ -63,7 +63,7 @@ fun ProfileHeader(
             .padding(start = 12.dp, top = 24.dp)
             .fillMaxWidth()) {
             Image(
-                painter = painterResource(id = R.drawable.ic_frag),
+                painter = painterResource(id = R.drawable.my_head),
                 contentDescription = "",
                 modifier = Modifier
                     .size(56.dp)
