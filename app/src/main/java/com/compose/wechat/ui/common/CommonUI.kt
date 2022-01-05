@@ -27,7 +27,10 @@ fun FunctionalityNotAvailableDialog(onDismiss: () -> Unit) {
             )
         },
         confirmButton = {
-            TextButton(onClick = onDismiss) {
+            TextButton(
+                onClick = onDismiss,
+                colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colors.error)
+            ) {
                 Text(text = "OK")
             }
         }

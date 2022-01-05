@@ -155,8 +155,8 @@ fun FriendsIndexes(scope: BoxScope, onIndexTouched: (String) -> Unit) {
                             .width(32.dp)
                             .height(32.dp)
                             .clip(RoundedCornerShape(16.dp))
-                            .background(MaterialTheme.colors.primary),
-                        color = MaterialTheme.colors.onPrimary,
+                            .background(MaterialTheme.colors.secondary),
+                        color = MaterialTheme.colors.onSecondary,
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.h6
                     )
