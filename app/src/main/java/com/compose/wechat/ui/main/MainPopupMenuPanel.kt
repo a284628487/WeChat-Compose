@@ -20,6 +20,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
+import com.compose.wechat.ui.common.CommonDivider
 
 @Composable
 fun MainPopupMenuPanel(showState: MutableState<Boolean>) {
@@ -89,11 +90,5 @@ fun AddMenuItem(
 
 @Composable
 fun AddMenuItemDivider() {
-    Divider(
-        modifier = Modifier
-            .padding(start = 48.dp)
-            .height(0.3.dp)
-            .background(Color.LightGray)
-            .fillMaxWidth()
-    )
+    CommonDivider(Modifier.padding(start = 48.dp))
 }

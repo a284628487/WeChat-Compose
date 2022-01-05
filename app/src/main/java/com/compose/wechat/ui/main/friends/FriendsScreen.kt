@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -19,7 +18,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,6 +28,7 @@ import coil.compose.rememberImagePainter
 import com.compose.wechat.entity.Friend
 import com.compose.wechat.entity.FriendIndexGroup
 import com.compose.wechat.entity.IFriendItem
+import com.compose.wechat.ui.common.CommonDivider
 import com.compose.wechat.ui.main.Router
 import com.compose.wechat.ui.common.FunctionalityNotAvailableDialog
 import com.compose.wechat.ui.theme.WeChatTheme
@@ -236,12 +235,7 @@ fun FriendItem(friend: Friend, onClick: (Friend) -> Unit) {
                 style = MaterialTheme.typography.body2
             )
         }
-        Divider(
-            modifier = Modifier
-                .offset(x = 64.dp),
-            color = Color.LightGray,
-            thickness = 0.3.dp
-        )
+        CommonDivider(modifier = Modifier.offset(x = 64.dp))
     }
 }
 

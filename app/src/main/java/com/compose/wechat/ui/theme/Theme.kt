@@ -12,24 +12,24 @@ import androidx.compose.ui.graphics.Color
 import com.compose.wechat.R
 
 private val LightThemeColors = lightColors(
-    primary = Red700,
-    primaryVariant = Red900,
-    onPrimary = Color.White,
-    secondary = Red700,
-    secondaryVariant = Red900,
-    background = Background,
+    primary = Color(0xFFEDEDED),
+    primaryVariant = Color(0xFFEDEDED),
+    onPrimary = Color(0xFF171717),
+    secondary = Color(0xFF06C05E),
+    background = Color(0xFFFAFAFA),
     onSecondary = Color.White,
-    error = Red800,
-    onBackground = Color.Black,
+    error = Color(0xffd00036),
+    onBackground = Color(0xFF222222),
 )
 
 private val DarkThemeColors = darkColors(
-    primary = Red300,
-    primaryVariant = Red700,
-    onPrimary = Color.Black,
-    secondary = Red300,
-    onSecondary = Color.Black,
-    error = Red200,
+    primary = Color(0xFF262626),
+    primaryVariant = Color(0xFF262626),
+    onPrimary = Color.White,
+    secondary = Color(0xFF020202),
+    background = Color(0xFF363636),
+    onSecondary = Color.White,
+    error = Color(0xffd00036),
     onBackground = Color.White
 )
 

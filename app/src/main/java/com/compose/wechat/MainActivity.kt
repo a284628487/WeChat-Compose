@@ -10,8 +10,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import com.compose.wechat.ui.main.MainNavGraph
 import com.compose.wechat.ui.common.LocalBackPressedDispatcher
-import com.compose.wechat.ui.theme.TitleBarBackground
 import com.compose.wechat.ui.theme.WeChatTheme
+import com.compose.wechat.ui.theme.isLaunchScreenShowed
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,16 +26,22 @@ class MainActivity : AppCompatActivity() {
             WeChatTheme() {
                 val systemUiController = rememberSystemUiController()
                 val darkIcons = MaterialTheme.colors.isLight
+                val initialColor = if (isLaunchScreenShowed) {
+                    MaterialTheme.colors.primary
+                } else {
+                    MaterialTheme.colors.background
+                }
                 val titleBarBackgroundColor = remember {
-                    mutableStateOf(TitleBarBackground)
+                    mutableStateOf(initialColor)
                 }
 
                 // SideEffect {
-                systemUiController.setSystemBarsColor(
+                systemUiController.setStatusBarColor(
                     titleBarBackgroundColor.value,
                     darkIcons = darkIcons
                 )
                 // }
+                systemUiController.setNavigationBarColor(MaterialTheme.colors.primary)
 
                 ProvideWindowInsets {
                     CompositionLocalProvider(LocalBackPressedDispatcher provides this.onBackPressedDispatcher) {

@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowRight
 import androidx.compose.material.icons.filled.BlurCircular
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -20,6 +19,8 @@ import androidx.compose.ui.unit.dp
 import com.compose.wechat.R
 import com.compose.wechat.entity.JumpConfig
 import com.compose.wechat.entity.JumpGroup
+import com.compose.wechat.ui.common.ArrowIcon
+import com.compose.wechat.ui.common.CommonDivider
 import com.compose.wechat.ui.theme.WeChatTheme
 
 
@@ -58,12 +59,7 @@ fun MomentsList(
                     JumpMenuItem(jump = jumpConfig, onMenuClicked)
                 }
                 item(index * 31 + (innerIndex + 1) * 3 + 1) {
-                    Divider(
-                        modifier = Modifier
-                            .height(0.2.dp)
-                            .offset(x = 40.dp)
-                            .background(Color.LightGray)
-                    )
+                    CommonDivider(modifier = Modifier.offset(x = 40.dp))
                 }
             }
         }
@@ -75,7 +71,7 @@ fun JumpMenuItem(jump: JumpConfig, onMenuClicked: (JumpConfig) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color.White)
+            .background(MaterialTheme.colors.surface)
             .clickable {
                 onMenuClicked(jump)
             }
@@ -87,7 +83,11 @@ fun JumpMenuItem(jump: JumpConfig, onMenuClicked: (JumpConfig) -> Unit) {
             contentDescription = "",
             modifier = Modifier.width(40.dp)
         )
-        Text(text = jump.name, modifier = Modifier.padding(end = 16.dp), color = Color.Black)
+        Text(
+            text = jump.name,
+            modifier = Modifier.padding(end = 16.dp),
+            color = MaterialTheme.colors.onBackground
+        )
         Spacer(modifier = Modifier.weight(1f))
         jump.content?.forEach {
             if (it is String) {
@@ -108,12 +108,7 @@ fun JumpMenuItem(jump: JumpConfig, onMenuClicked: (JumpConfig) -> Unit) {
                 )
             }
         }
-        Icon(
-            imageVector = Icons.Filled.ArrowRight,
-            contentDescription = "",
-            modifier = Modifier.width(24.dp),
-            tint = Color.LightGray
-        )
+        ArrowIcon(modifier = Modifier.width(24.dp))
     }
 }
 
@@ -135,7 +130,7 @@ fun MomentsItemPreview() {
 @Composable
 fun MomentsListPreview() {
     WeChatTheme {
-        Surface(modifier = Modifier.background(Color.White)) {
+        Surface(modifier = Modifier.background(MaterialTheme.colors.surface)) {
             MomentsList(
                 list = listOf<JumpGroup>(
                     JumpGroup(

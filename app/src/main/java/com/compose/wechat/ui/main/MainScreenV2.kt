@@ -28,7 +28,6 @@ import com.compose.wechat.ui.main.moments.MomentsViewModel
 import com.compose.wechat.ui.main.profile.ProfileScreen
 import com.compose.wechat.ui.main.profile.ProfileViewModel
 import com.compose.wechat.ui.common.BackPressHandler
-import com.compose.wechat.ui.theme.TitleBarBackground
 import com.compose.wechat.utils.onPress
 import com.compose.wechat.utils.touchSwitchState
 
@@ -55,24 +54,25 @@ fun NavWithBottomNavigation(
                 it.route == desRoute
             }?.name ?: return@Scaffold
             if (desRoute != Router.PROFILE) {
-                statusBarColor.value = TitleBarBackground
+                statusBarColor.value = MaterialTheme.colors.primary
                 TopAppBar(
                     title = {
                         Text(text = desName)
                     },
-                    modifier = Modifier.touchSwitchState(showAddPanelState), actions = {
+                    modifier = Modifier
+                        .touchSwitchState(showAddPanelState), actions = {
                         IconButton(onClick = onMainSearchClick) {
-                            Icon(Icons.Filled.Search, null, tint = MaterialTheme.colors.primary)
+                            Icon(Icons.Filled.Search, null, tint = MaterialTheme.colors.onPrimary)
                         }
                         IconButton(onClick = {
                             showAddPanelState.value = true
                         }) {
-                            Icon(Icons.Filled.Add, null, tint = MaterialTheme.colors.primary)
+                            Icon(Icons.Filled.Add, null, tint = MaterialTheme.colors.onPrimary)
                         }
                     },
-                    backgroundColor = TitleBarBackground,
-                    contentColor = MaterialTheme.colors.primary,
-                    elevation = 16.dp
+                    backgroundColor = MaterialTheme.colors.primary,
+                    contentColor = MaterialTheme.colors.onPrimary,
+                    elevation = 2.dp
                 )
             } else {
                 statusBarColor.value = Color.White
@@ -81,8 +81,8 @@ fun NavWithBottomNavigation(
         bottomBar = {
             BottomNavigation(
                 modifier = Modifier.touchSwitchState(showAddPanelState),
-                backgroundColor = TitleBarBackground,
-                contentColor = MaterialTheme.colors.primary
+                backgroundColor = MaterialTheme.colors.primary,
+                contentColor = MaterialTheme.colors.onPrimary
             ) {
                 val currentDestination = state.value?.destination
                 navList.forEach {
@@ -153,7 +153,10 @@ fun NavWithBottomNavigation(
                 val momentsViewModel = hiltViewModel<ProfileViewModel>()
                 val menus = momentsViewModel.getProfileMenuList()
                 val user = momentsViewModel.getUser()
-                ProfileScreen(user, menus) {
+                ProfileScreen(user, menus) { jump ->
+                    if (jump.route.isNotEmpty()) {
+                        parentNavController.navigate(jump.route)
+                    }
                 }
             }
         }

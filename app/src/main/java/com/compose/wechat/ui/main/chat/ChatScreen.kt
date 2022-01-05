@@ -28,7 +28,7 @@ import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
 import com.compose.wechat.R
 import com.compose.wechat.entity.HomeMessage
-import com.compose.wechat.ui.theme.TitleBarBackground
+import com.compose.wechat.ui.common.CommonTopBar
 import kotlinx.coroutines.delay
 
 @Composable
@@ -36,25 +36,7 @@ fun ChatScreen(navController: NavHostController) {
     val chatViewModel = hiltViewModel<ChatViewModel>()
     val list = chatViewModel.getMessages().collectAsState(initial = emptyList())
     Scaffold(topBar = {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp)
-                .background(TitleBarBackground),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = chatViewModel.getSessionName(),
-                color = MaterialTheme.colors.primary,
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.h6
-            )
-        }
-        IconButton(onClick = {
-            navController.popBackStack()
-        }) {
-            Icon(Icons.Filled.ArrowBack, null, tint = MaterialTheme.colors.primary)
-        }
+        CommonTopBar(navController = navController, title = chatViewModel.getSessionName())
     }) {
         Log.d("ChatScreen", "compose")
         ChatList(list = list.value, {
@@ -133,7 +115,7 @@ fun ChatMessageReceived(message: HomeMessage, onLongPress: (HomeMessage) -> Unit
             }
             .wrapContentSize(),
             shape = MaterialTheme.shapes.medium,
-            color = Color.White,
+            color = MaterialTheme.colors.surface,
             elevation = 1.dp) {
             Text(
                 text = message.summary, modifier = Modifier.padding(8.dp)
@@ -178,7 +160,7 @@ fun ChatMessageSend(message: HomeMessage, onLongPress: (HomeMessage) -> Unit) {
                 top.linkTo(parent.top)
                 end.linkTo(spacer.start)
             }, shape = MaterialTheme.shapes.medium,
-            color = Color.White,
+            color = MaterialTheme.colors.surface,
             elevation = 1.dp
         ) {
             Text(

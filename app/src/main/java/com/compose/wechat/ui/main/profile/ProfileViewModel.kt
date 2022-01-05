@@ -7,6 +7,7 @@ import com.compose.wechat.base.BaseViewModel
 import com.compose.wechat.entity.JumpConfig
 import com.compose.wechat.entity.JumpGroup
 import com.compose.wechat.entity.User
+import com.compose.wechat.ui.main.Router
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -25,7 +26,7 @@ class ProfileViewModel @Inject constructor(application: Application) :
                     JumpConfig(
                         Icons.Filled.Payment,
                         "支付",
-                        ""
+                        Router.PAY
                     )
                 )
             )

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowRight
 import androidx.compose.material.icons.filled.QrCode
 import androidx.compose.material.icons.filled.Usb
 import androidx.compose.material.icons.filled.VerifiedUser
@@ -16,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -24,6 +22,7 @@ import com.compose.wechat.R
 import com.compose.wechat.entity.JumpConfig
 import com.compose.wechat.entity.JumpGroup
 import com.compose.wechat.entity.User
+import com.compose.wechat.ui.common.ArrowIcon
 import com.compose.wechat.ui.main.moments.MomentsList
 
 
@@ -52,7 +51,7 @@ fun ProfileHeader(
 ) {
     Column(
         modifier = Modifier
-            .background(Color.White)
+            .background(MaterialTheme.colors.surface)
             .padding(bottom = 12.dp)
             .wrapContentSize()
     ) {
@@ -78,19 +77,16 @@ fun ProfileHeader(
                     Text(
                         text = "微信号: ${user.id}",
                         style = MaterialTheme.typography.caption,
+                        color = MaterialTheme.colors.onBackground
                     )
                     Spacer(modifier = Modifier.weight(1F))
                     Icon(
                         imageVector = Icons.Filled.QrCode,
                         contentDescription = "",
-                        tint = Color.LightGray,
+                        tint = MaterialTheme.colors.onBackground,
                         modifier = Modifier.size(18.dp)
                     )
-                    Icon(
-                        imageVector = Icons.Filled.ArrowRight,
-                        contentDescription = "",
-                        tint = Color.LightGray
-                    )
+                    ArrowIcon()
                 }
             }
         }
@@ -103,32 +99,42 @@ fun ProfileHeader(
             TextButton(
                 onClick = onStatusClicked,
                 modifier = Modifier.height(24.dp),
-                border = BorderStroke(width = 0.2.dp, color = Color.LightGray),
+                border = BorderStroke(width = 0.2.dp, color = MaterialTheme.colors.onBackground),
                 shape = RoundedCornerShape(12.dp),
                 contentPadding = PaddingValues(1.dp)
             ) {
-                Text(text = "+ 状态", style = MaterialTheme.typography.caption)
+                Text(
+                    text = "+ 状态",
+                    style = MaterialTheme.typography.caption,
+                    color = MaterialTheme.colors.onBackground
+                )
             }
             TextButton(
                 onClick = onFriendStatusClicked,
                 modifier = Modifier
                     .height(24.dp)
                     .padding(start = 12.dp),
-                border = BorderStroke(width = 0.2.dp, color = Color.LightGray),
+                border = BorderStroke(width = 0.2.dp, color = MaterialTheme.colors.onBackground),
                 shape = RoundedCornerShape(12.dp),
                 contentPadding = PaddingValues(vertical = 1.dp, horizontal = 12.dp)
             ) {
                 Icon(
                     imageVector = Icons.Filled.VerifiedUser,
                     contentDescription = "",
-                    modifier = Modifier.size(16.dp)
+                    modifier = Modifier.size(16.dp),
+                    tint = MaterialTheme.colors.onBackground
                 )
                 Icon(
                     imageVector = Icons.Filled.Usb,
                     contentDescription = "",
-                    modifier = Modifier.size(16.dp)
+                    modifier = Modifier.size(16.dp),
+                    tint = MaterialTheme.colors.onBackground
                 )
-                Text(text = "2个朋友", style = MaterialTheme.typography.caption)
+                Text(
+                    text = "2个朋友",
+                    style = MaterialTheme.typography.caption,
+                    color = MaterialTheme.colors.onBackground
+                )
             }
         }
     }

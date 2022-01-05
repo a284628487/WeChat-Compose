@@ -9,8 +9,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navigation
 import com.compose.wechat.R
 import com.compose.wechat.ui.main.chat.ChatScreen
+import com.compose.wechat.ui.pay.PayContentScreen
+import com.compose.wechat.ui.pay.PayPasswordInputScreen
 import com.compose.wechat.ui.theme.isLaunchScreenShowed
 
 object Router {
@@ -21,6 +24,9 @@ object Router {
     const val MOMENTS = "moments"
     const val PROFILE = "profile"
     const val CHAT = "chat"
+    const val PAY_VALIDATE = "payPasswordValidate"
+    const val PAY_CONTENT = "payContent"
+    const val PAY = "pay"
 }
 
 @Composable
@@ -66,7 +72,7 @@ fun MainNavGraph(statusBarColor: MutableState<Color>) {
         }
         composable(Router.LAUNCH) {
             Log.d("Launch", "compose")
-            LaunchScreen(navController = navController)
+            LaunchScreen(navController = navController, statusBarColor)
         }
         composable(
             "${Router.CHAT}/{id}/{name}",
@@ -79,6 +85,26 @@ fun MainNavGraph(statusBarColor: MutableState<Color>) {
             val id = it.arguments?.getInt("id")
             val name = it.arguments?.getString("name")
             ChatScreen(navController = navController)
+        }
+        navigation(startDestination = Router.PAY_VALIDATE, route = Router.PAY) {
+            composable(Router.PAY_VALIDATE) {
+                PayPasswordInputScreen(navController, statusBarColor, {
+                    Log.d(Router.PAY_VALIDATE, "setPwdComplete")
+                    navController.apply {
+                        popBackStack()
+                        navigate(Router.PAY_CONTENT)
+                    }
+                }, {
+                    Log.d(Router.PAY_VALIDATE, "inputPwdComplete")
+                    navController.apply {
+                        popBackStack()
+                        navigate(Router.PAY_CONTENT)
+                    }
+                })
+            }
+            composable(Router.PAY_CONTENT) {
+                PayContentScreen(navController, statusBarColor)
+            }
         }
     }
 }

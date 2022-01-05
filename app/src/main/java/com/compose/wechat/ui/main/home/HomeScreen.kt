@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -21,6 +20,7 @@ import coil.compose.rememberImagePainter
 import com.compose.wechat.R
 import com.compose.wechat.entity.HomeMessage
 import com.compose.wechat.entity.UiState
+import com.compose.wechat.ui.common.CommonDivider
 import com.compose.wechat.ui.theme.WeChatTheme
 
 @Composable
@@ -45,9 +45,9 @@ fun HomeScreen(uiState: UiState<List<HomeMessage>>, onMessageClick: (HomeMessage
 @Composable
 fun HomeMessageItem(message: HomeMessage, onMessageClick: (HomeMessage) -> Unit) {
     val backgroundColor = if (message.isTopped) {
-        Color(0xFFEBEBEB)
+        MaterialTheme.colors.primary
     } else {
-        Color.White
+        MaterialTheme.colors.surface
     }
     Row(
         modifier = Modifier
@@ -115,12 +115,7 @@ fun HomeMessageItem(message: HomeMessage, onMessageClick: (HomeMessage) -> Unit)
                     )
                 }
             }
-            Divider(
-                modifier = Modifier
-                    .offset(y = 9.5.dp),
-                color = Color.LightGray,
-                thickness = 0.3.dp
-            )
+            CommonDivider(modifier = Modifier.offset(y = 9.5.dp))
         }
     }
 }

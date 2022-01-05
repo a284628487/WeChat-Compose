@@ -27,7 +27,11 @@ import kotlinx.coroutines.launch
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
-fun LaunchScreen(navController: NavHostController) {
+fun LaunchScreen(
+    navController: NavHostController,
+    statusBarColor: MutableState<Color>
+) {
+    statusBarColor.value = MaterialTheme.colors.background
     Surface(color = MaterialTheme.colors.background) {
         val scope = rememberCoroutineScope()
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -77,10 +81,8 @@ fun SingleAnimString(str: String, index: Int, callback: (() -> Unit)? = null) {
     Text(
         text = str,
         modifier = Modifier.sizeIn(minWidth = 18.dp),
-        color = MaterialTheme.colors.primary,
-        style = TextStyle(
-            Color.Red, fontSize = textSize.value.sp
-        ),
+        color = MaterialTheme.colors.secondary,
+        style = TextStyle(fontSize = textSize.value.sp),
         textAlign = TextAlign.Center
     )
 }
@@ -88,5 +90,7 @@ fun SingleAnimString(str: String, index: Int, callback: (() -> Unit)? = null) {
 @Preview
 @Composable
 fun LaunchScreenPreview() {
-    LaunchScreen(rememberNavController())
+    LaunchScreen(rememberNavController(), remember {
+        mutableStateOf(Color.DarkGray)
+    })
 }

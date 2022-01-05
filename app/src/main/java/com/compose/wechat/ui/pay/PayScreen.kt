@@ -3,10 +3,12 @@ package com.compose.wechat.ui.pay
 import android.content.Context
 import android.graphics.PointF
 import android.view.MotionEvent
+import android.widget.Toast
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
@@ -21,59 +23,150 @@ import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import com.compose.wechat.ui.common.CommonTopBar
 import com.compose.wechat.ui.theme.Red200
+import com.compose.wechat.ui.theme.Red700
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 
+const val PWD_STATE_NOT_EXISTED = 0
+const val PWD_STATE_SET_REPEAT = 1
+const val PWD_STATE_SET_REPEAT_OK = 2
+const val PWD_STATE_EXISTED = 3
+
+const val PWD_KEY = "pay_pwd"
+
 @Composable
-fun PayPasswordInputScreen(scope: CoroutineScope) {
+fun PayContentScreen(
+    navController: NavHostController,
+    statusBarColor: MutableState<Color>
+) {
+    Scaffold(topBar = {
+        statusBarColor.value = MaterialTheme.colors.primary
+        CommonTopBar(navController, "我的账户")
+    }) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Row() {
+                Icon(imageVector = Icons.Filled.AttachMoney, contentDescription = "")
+                Text(text = "10,000,000", style = MaterialTheme.typography.body1)
+            }
+        }
+    }
+}
+
+@Composable
+fun PayPasswordInputScreen(
+    navController: NavHostController,
+    statusBarColor: MutableState<Color>,
+    setPwdComplete: () -> Unit = {},
+    inputPwdComplete: () -> Unit = {}
+) {
+    Scaffold(topBar = {
+        statusBarColor.value = MaterialTheme.colors.primary
+        CommonTopBar(navController, "安全支付")
+    }) {
+        PayPasswordInput(
+            scope = rememberCoroutineScope(),
+            setPwdComplete,
+            inputPwdComplete
+        )
+    }
+}
+
+@Composable
+fun PayPasswordInput(
+    scope: CoroutineScope,
+    setPwdComplete: () -> Unit = {},
+    inputPwdComplete: () -> Unit = {}
+) {
     val indexes = remember {
         mutableStateListOf<Int>()
     }
     val context = LocalContext.current
     val sp = context.getSharedPreferences("wechat", Context.MODE_PRIVATE)
-    val passWord = sp.getString("pay_pwd", null)
-    var tempPwd = ""
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        val setPwdState = remember {
-            mutableStateOf(0)
+    var passWord = sp.getString(PWD_KEY, null)
+    val tempPwd = remember {
+        mutableStateOf("")
+    }
+    val setPwdState = remember {
+        val initialState = if (passWord.isNullOrEmpty()) {
+            PWD_STATE_NOT_EXISTED
+        } else {
+            PWD_STATE_EXISTED
         }
+        mutableStateOf(initialState)
+    }
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 150.dp),
+                .padding(top = 90.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             if (passWord.isNullOrEmpty()) {
-                if (setPwdState.value == 1) {
-                    Text(text = "请重复手势密码")
-                } else if (setPwdState.value == 0) {
-                    Text(text = "请设置手势密码")
-                } else {
-                    // done
-                    sp.edit().putString("pay_pwd", indexes.joinToString(",")).apply()
+                when (setPwdState.value) {
+                    PWD_STATE_SET_REPEAT -> {
+                        Text(text = "请重复手势密码")
+                    }
+                    PWD_STATE_NOT_EXISTED -> {
+                        Text(text = "请设置手势密码")
+                    }
+                    else -> {
+                        // set password done
+                        sp.edit().putString(PWD_KEY, tempPwd.value).apply()
+                        setPwdComplete()
+                    }
                 }
             } else {
                 Text(text = "请输入手势密码")
             }
         }
         PasswordInputWidget(modifier = Modifier.size(300.dp), indexes) {
-            scope.launch {
-                if (setPwdState.value == 0) {
-                    tempPwd = indexes.joinToString(",")
-                    setPwdState.value = 1
-                } else if (setPwdState.value == 1) {
+            if (setPwdState.value == PWD_STATE_EXISTED) {
+                if (passWord == indexes.joinToString(",")) {
+                    inputPwdComplete()
+                } else {
+                    Toast.makeText(context, "密码输入错误,请重新输入", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                if (setPwdState.value == PWD_STATE_NOT_EXISTED) {
+                    tempPwd.value = indexes.joinToString(",")
+                    setPwdState.value = PWD_STATE_SET_REPEAT
+                } else if (setPwdState.value == PWD_STATE_SET_REPEAT) {
                     val temp = indexes.joinToString(",")
-                    if (temp == tempPwd) {
-                        setPwdState.value = 2
+                    if (temp == tempPwd.value) {
+                        setPwdState.value = PWD_STATE_SET_REPEAT_OK
                     } else {
-                        setPwdState.value = 0
+                        setPwdState.value = PWD_STATE_NOT_EXISTED
+                        Toast.makeText(context, "密码和前次密码不同,请重新开始设置", Toast.LENGTH_SHORT).show()
                     }
                 }
+            }
+            scope.launch {
                 delay(200)
                 indexes.clear()
+            }
+        }
+        if (setPwdState.value == PWD_STATE_EXISTED) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(bottom = 30.dp),
+                contentAlignment = Alignment.BottomCenter
+            ) {
+                TextButton(
+                    onClick = {
+                        sp.edit().putString(PWD_KEY, "").apply()
+                        setPwdState.value = PWD_STATE_NOT_EXISTED
+                        passWord = ""
+                    },
+                    colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colors.error)
+                ) {
+                    Text(text = "重置密码")
+                }
             }
         }
     }
@@ -94,7 +187,7 @@ fun PasswordInputWidget(
     val radius = 90F
     val defaultColor = Color.LightGray
     val checkedColor = Red200
-    val primaryColor = MaterialTheme.colors.primary
+    val primaryColor = Red700
 
     val touchPoint = remember {
         mutableStateOf(PointF(0F, 0F))
@@ -184,6 +277,6 @@ fun PasswordInputWidget(
 @Composable
 @Preview
 fun PasswordInputWidgetPreview() {
-    PayPasswordInputScreen(rememberCoroutineScope())
+    PayPasswordInput(rememberCoroutineScope())
 }
 
