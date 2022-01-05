@@ -17,7 +17,7 @@ private val LightThemeColors = lightColors(
     onPrimary = Color(0xFF171717),
     secondary = Color(0xFF06C05E),
     background = Color(0xFFFAFAFA),
-    onSecondary = Color.White,
+    onSecondary = Color(0xFF171717),
     error = Color(0xffd00036),
     onBackground = Color(0xFF222222),
 )

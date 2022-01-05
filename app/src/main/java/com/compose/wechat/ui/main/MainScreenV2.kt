@@ -112,7 +112,9 @@ fun NavWithBottomNavigation(
                         },
                         label = {
                             Text(it.name)
-                        }
+                        },
+                        selectedContentColor = MaterialTheme.colors.secondary,
+                        unselectedContentColor = MaterialTheme.colors.onSecondary
                     )
                 }
             }
