@@ -1,10 +1,12 @@
 package com.compose.wechat.ui.pay
 
+import android.content.Context
 import android.graphics.PointF
 import android.view.MotionEvent
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
@@ -16,6 +18,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInteropFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.compose.wechat.ui.theme.Red200
@@ -29,9 +32,46 @@ fun PayPasswordInputScreen(scope: CoroutineScope) {
     val indexes = remember {
         mutableStateListOf<Int>()
     }
+    val context = LocalContext.current
+    val sp = context.getSharedPreferences("wechat", Context.MODE_PRIVATE)
+    val passWord = sp.getString("pay_pwd", null)
+    var tempPwd = ""
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        val setPwdState = remember {
+            mutableStateOf(0)
+        }
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 150.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            if (passWord.isNullOrEmpty()) {
+                if (setPwdState.value == 1) {
+                    Text(text = "请重复手势密码")
+                } else if (setPwdState.value == 0) {
+                    Text(text = "请设置手势密码")
+                } else {
+                    // done
+                    sp.edit().putString("pay_pwd", indexes.joinToString(",")).apply()
+                }
+            } else {
+                Text(text = "请输入手势密码")
+            }
+        }
         PasswordInputWidget(modifier = Modifier.size(300.dp), indexes) {
             scope.launch {
+                if (setPwdState.value == 0) {
+                    tempPwd = indexes.joinToString(",")
+                    setPwdState.value = 1
+                } else if (setPwdState.value == 1) {
+                    val temp = indexes.joinToString(",")
+                    if (temp == tempPwd) {
+                        setPwdState.value = 2
+                    } else {
+                        setPwdState.value = 0
+                    }
+                }
                 delay(200)
                 indexes.clear()
             }
@@ -144,10 +184,6 @@ fun PasswordInputWidget(
 @Composable
 @Preview
 fun PasswordInputWidgetPreview() {
-    PasswordInputWidget(modifier = Modifier
-        .width(300.dp)
-        .height(600.dp), remember {
-        mutableStateListOf(0, 1)
-    })
+    PayPasswordInputScreen(rememberCoroutineScope())
 }
 
